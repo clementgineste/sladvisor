@@ -2,7 +2,7 @@
 
 > Calculateur interactif de SLA — répondez à quelques questions sur votre service et obtenez une recommandation de niveau de SLA avec les implications techniques, financières et opérationnelles.
 
-🔗 **[Essayer en ligne](https://clementgineste.github.io/sladvisor/)**
+🔗 **[Essayer en ligne](https://sladvisor.dev)**
 
 ## Pourquoi ?
 
