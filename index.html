@@ -113,7 +113,10 @@
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <template x-for="opt in criticalityOptions" :key="opt.value">
                   <label
-                    class="relative flex flex-col p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-blue-500 has-[:focus-visible]:ring-offset-2 dark:has-[:focus-visible]:ring-offset-gray-900"
+                    tabindex="0"
+                    @keydown.enter.prevent="$el.querySelector('input').click(); $nextTick(() => { const btn = document.querySelector('[data-nav-next]'); if (btn) btn.focus(); })"
+                    @keydown.space.prevent="$el.querySelector('input').click(); $el.focus()"
+                    class="relative flex flex-col p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-900 focus:outline-none"
                     :class="criticality === opt.value
                       ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
                       : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-gray-300 dark:hover:border-gray-600'"
@@ -123,7 +126,7 @@
                       name="criticality"
                       :value="opt.value"
                       x-model="criticality"
-                      class="sr-only"
+                      class="sr-only" tabindex="-1"
                     >
                     <span class="font-semibold" x-text="opt.label"></span>
                     <span class="text-sm text-gray-500 dark:text-gray-400 mt-1" x-text="opt.desc"></span>
@@ -151,7 +154,10 @@
               <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <template x-for="opt in downtimeToleranceOptions" :key="opt.value">
                   <label
-                    class="relative flex flex-col p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-blue-500 has-[:focus-visible]:ring-offset-2 dark:has-[:focus-visible]:ring-offset-gray-900"
+                    tabindex="0"
+                    @keydown.enter.prevent="$el.querySelector('input').click(); $nextTick(() => { const btn = document.querySelector('[data-nav-next]'); if (btn) btn.focus(); })"
+                    @keydown.space.prevent="$el.querySelector('input').click(); $el.focus()"
+                    class="relative flex flex-col p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-900 focus:outline-none"
                     :class="downtimeTolerance === opt.value
                       ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
                       : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-gray-300 dark:hover:border-gray-600'"
@@ -161,7 +167,7 @@
                       name="downtimeTolerance"
                       :value="opt.value"
                       x-model="downtimeTolerance"
-                      class="sr-only"
+                      class="sr-only" tabindex="-1"
                     >
                     <span class="font-semibold" x-text="opt.label"></span>
                     <span class="text-sm text-gray-500 dark:text-gray-400 mt-1" x-text="opt.desc"></span>
@@ -189,7 +195,10 @@
               <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <template x-for="opt in supportWindowOptions" :key="opt.value">
                   <label
-                    class="relative flex flex-col p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-blue-500 has-[:focus-visible]:ring-offset-2 dark:has-[:focus-visible]:ring-offset-gray-900"
+                    tabindex="0"
+                    @keydown.enter.prevent="$el.querySelector('input').click(); $nextTick(() => { const btn = document.querySelector('[data-nav-next]'); if (btn) btn.focus(); })"
+                    @keydown.space.prevent="$el.querySelector('input').click(); $el.focus()"
+                    class="relative flex flex-col p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-900 focus:outline-none"
                     :class="supportWindow === opt.value
                       ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
                       : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-gray-300 dark:hover:border-gray-600'"
@@ -199,7 +208,7 @@
                       name="supportWindow"
                       :value="opt.value"
                       x-model="supportWindow"
-                      class="sr-only"
+                      class="sr-only" tabindex="-1"
                     >
                     <span class="font-semibold" x-text="opt.label"></span>
                     <span class="text-sm text-gray-500 dark:text-gray-400 mt-1" x-text="opt.desc"></span>
@@ -227,7 +236,10 @@
               <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <template x-for="opt in budgetOptions" :key="opt.value">
                   <label
-                    class="relative flex flex-col p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-blue-500 has-[:focus-visible]:ring-offset-2 dark:has-[:focus-visible]:ring-offset-gray-900"
+                    tabindex="0"
+                    @keydown.enter.prevent="$el.querySelector('input').click(); $nextTick(() => { const btn = document.querySelector('[data-nav-next]'); if (btn) btn.focus(); })"
+                    @keydown.space.prevent="$el.querySelector('input').click(); $el.focus()"
+                    class="relative flex flex-col p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-900 focus:outline-none"
                     :class="budgetLevel === opt.value
                       ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
                       : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-gray-300 dark:hover:border-gray-600'"
@@ -237,7 +249,7 @@
                       name="budgetLevel"
                       :value="opt.value"
                       x-model="budgetLevel"
-                      class="sr-only"
+                      class="sr-only" tabindex="-1"
                     >
                     <span class="font-semibold" x-text="opt.label"></span>
                     <span class="text-sm text-gray-500 dark:text-gray-400 mt-1" x-text="opt.desc"></span>
@@ -265,7 +277,10 @@
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <template x-for="opt in rtoOptions" :key="opt.value">
                   <label
-                    class="relative flex flex-col p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-blue-500 has-[:focus-visible]:ring-offset-2 dark:has-[:focus-visible]:ring-offset-gray-900"
+                    tabindex="0"
+                    @keydown.enter.prevent="$el.querySelector('input').click(); $nextTick(() => { const btn = document.querySelector('[data-nav-next]'); if (btn) btn.focus(); })"
+                    @keydown.space.prevent="$el.querySelector('input').click(); $el.focus()"
+                    class="relative flex flex-col p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-900 focus:outline-none"
                     :class="rto === opt.value
                       ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
                       : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-gray-300 dark:hover:border-gray-600'"
@@ -275,7 +290,7 @@
                       name="rto"
                       :value="opt.value"
                       x-model="rto"
-                      class="sr-only"
+                      class="sr-only" tabindex="-1"
                     >
                     <span class="font-semibold" x-text="opt.label"></span>
                     <span class="text-sm text-gray-500 dark:text-gray-400 mt-1" x-text="opt.desc"></span>
@@ -303,7 +318,10 @@
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <template x-for="opt in rpoOptions" :key="opt.value">
                   <label
-                    class="relative flex flex-col p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-blue-500 has-[:focus-visible]:ring-offset-2 dark:has-[:focus-visible]:ring-offset-gray-900"
+                    tabindex="0"
+                    @keydown.enter.prevent="$el.querySelector('input').click(); $nextTick(() => { const btn = document.querySelector('[data-nav-next]'); if (btn) btn.focus(); })"
+                    @keydown.space.prevent="$el.querySelector('input').click(); $el.focus()"
+                    class="relative flex flex-col p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-900 focus:outline-none"
                     :class="rpo === opt.value
                       ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
                       : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-gray-300 dark:hover:border-gray-600'"
@@ -313,7 +331,7 @@
                       name="rpo"
                       :value="opt.value"
                       x-model="rpo"
-                      class="sr-only"
+                      class="sr-only" tabindex="-1"
                     >
                     <span class="font-semibold" x-text="opt.label"></span>
                     <span class="text-sm text-gray-500 dark:text-gray-400 mt-1" x-text="opt.desc"></span>
@@ -340,6 +358,7 @@
             x-show="currentStep < 6"
             @click="nextStep()"
             :disabled="!isStepValid()"
+            data-nav-next
             class="px-6 py-2.5 rounded-lg font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
             :class="isStepValid()
               ? 'bg-blue-600 hover:bg-blue-700 text-white'
@@ -352,6 +371,7 @@
             x-show="currentStep === 6"
             @click="calculate()"
             :disabled="!isStepValid()"
+            data-nav-next
             class="px-6 py-2.5 rounded-lg font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
             :class="isStepValid()
               ? 'bg-green-600 hover:bg-green-700 text-white'
@@ -923,7 +943,17 @@
         nextStep() {
           if (this.isStepValid() && this.currentStep < 6) {
             this.currentStep++;
+            this.focusFirstCard();
           }
+        },
+
+        focusFirstCard() {
+          setTimeout(() => {
+            const labels = document.querySelectorAll('label[tabindex="0"]');
+            for (const l of labels) {
+              if (l.offsetParent !== null) { l.focus(); break; }
+            }
+          }, 350);
         },
 
         prevStep() {
