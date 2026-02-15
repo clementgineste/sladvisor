@@ -93,7 +93,7 @@
         </nav>
 
         <!-- SECTION: steps -->
-        <div class="relative overflow-hidden">
+        <div class="relative overflow-hidden p-2 -m-2">
 
           <!-- Step 1: Criticality -->
           <div
@@ -113,7 +113,7 @@
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <template x-for="opt in criticalityOptions" :key="opt.value">
                   <label
-                    class="relative flex flex-col p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 focus-within:ring-2 focus-within:ring-blue-500 focus-within:ring-offset-2 dark:focus-within:ring-offset-gray-900"
+                    class="relative flex flex-col p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-blue-500 has-[:focus-visible]:ring-offset-2 dark:has-[:focus-visible]:ring-offset-gray-900"
                     :class="criticality === opt.value
                       ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
                       : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-gray-300 dark:hover:border-gray-600'"
@@ -151,7 +151,7 @@
               <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <template x-for="opt in downtimeToleranceOptions" :key="opt.value">
                   <label
-                    class="relative flex flex-col p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 focus-within:ring-2 focus-within:ring-blue-500 focus-within:ring-offset-2 dark:focus-within:ring-offset-gray-900"
+                    class="relative flex flex-col p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-blue-500 has-[:focus-visible]:ring-offset-2 dark:has-[:focus-visible]:ring-offset-gray-900"
                     :class="downtimeTolerance === opt.value
                       ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
                       : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-gray-300 dark:hover:border-gray-600'"
@@ -189,7 +189,7 @@
               <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <template x-for="opt in supportWindowOptions" :key="opt.value">
                   <label
-                    class="relative flex flex-col p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 focus-within:ring-2 focus-within:ring-blue-500 focus-within:ring-offset-2 dark:focus-within:ring-offset-gray-900"
+                    class="relative flex flex-col p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-blue-500 has-[:focus-visible]:ring-offset-2 dark:has-[:focus-visible]:ring-offset-gray-900"
                     :class="supportWindow === opt.value
                       ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
                       : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-gray-300 dark:hover:border-gray-600'"
@@ -227,7 +227,7 @@
               <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <template x-for="opt in budgetOptions" :key="opt.value">
                   <label
-                    class="relative flex flex-col p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 focus-within:ring-2 focus-within:ring-blue-500 focus-within:ring-offset-2 dark:focus-within:ring-offset-gray-900"
+                    class="relative flex flex-col p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-blue-500 has-[:focus-visible]:ring-offset-2 dark:has-[:focus-visible]:ring-offset-gray-900"
                     :class="budgetLevel === opt.value
                       ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
                       : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-gray-300 dark:hover:border-gray-600'"
@@ -265,7 +265,7 @@
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <template x-for="opt in rtoOptions" :key="opt.value">
                   <label
-                    class="relative flex flex-col p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 focus-within:ring-2 focus-within:ring-blue-500 focus-within:ring-offset-2 dark:focus-within:ring-offset-gray-900"
+                    class="relative flex flex-col p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-blue-500 has-[:focus-visible]:ring-offset-2 dark:has-[:focus-visible]:ring-offset-gray-900"
                     :class="rto === opt.value
                       ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
                       : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-gray-300 dark:hover:border-gray-600'"
@@ -303,7 +303,7 @@
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <template x-for="opt in rpoOptions" :key="opt.value">
                   <label
-                    class="relative flex flex-col p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 focus-within:ring-2 focus-within:ring-blue-500 focus-within:ring-offset-2 dark:focus-within:ring-offset-gray-900"
+                    class="relative flex flex-col p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-blue-500 has-[:focus-visible]:ring-offset-2 dark:has-[:focus-visible]:ring-offset-gray-900"
                     :class="rpo === opt.value
                       ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
                       : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-gray-300 dark:hover:border-gray-600'"
