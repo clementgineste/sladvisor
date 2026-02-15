@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr" :class="{ 'dark': darkMode }">
+<html lang="fr">
 <head>
   <!-- SECTION: meta -->
   <meta charset="UTF-8">
@@ -23,6 +23,15 @@
         }
       }
     }
+  </script>
+
+  <!-- SECTION: dark-mode-init -->
+  <script>
+    (function() {
+      var stored = localStorage.getItem('darkMode');
+      var dark = stored !== null ? stored === 'true' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (dark) document.documentElement.classList.add('dark');
+    })();
   </script>
 
   <!-- SECTION: styles -->
@@ -824,12 +833,11 @@
     function slaCalculator() {
       return {
         // Dark mode
-        darkMode: localStorage.getItem('darkMode')
-          ? localStorage.getItem('darkMode') === 'true'
-          : window.matchMedia('(prefers-color-scheme: dark)').matches,
+        darkMode: document.documentElement.classList.contains('dark'),
 
         toggleDarkMode() {
           this.darkMode = !this.darkMode;
+          document.documentElement.classList.toggle('dark', this.darkMode);
           localStorage.setItem('darkMode', this.darkMode);
         },
 
