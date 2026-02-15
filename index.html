@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="fr" :class="{ 'dark': darkMode }">
+<head>
+  <!-- SECTION: meta -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="SLA Advisor - Calculez et recommandez le niveau de SLA adapte a vos besoins">
+  <meta property="og:title" content="SLA Advisor">
+  <meta property="og:description" content="Outil interactif de recommandation SLA pour vos services">
+  <meta property="og:type" content="website">
+  <title>SLA Advisor</title>
+
+  <!-- SECTION: tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'Liberation Mono', 'Courier New', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- SECTION: styles -->
+  <style>
+    [x-cloak] { display: none !important; }
+  </style>
+</head>
+<body class="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300">
+
+  <!-- SECTION: app -->
+  <div x-data="slaCalculator()" x-cloak>
+
+    <!-- SECTION: header -->
+    <header class="sticky top-0 z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border-b border-gray-200 dark:border-gray-700">
+      <div class="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
+        <h1 class="text-xl font-bold tracking-tight">SLA Advisor</h1>
+        <button
+          @click="toggleDarkMode()"
+          class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
+          :aria-label="darkMode ? 'Activer le mode clair' : 'Activer le mode sombre'"
+        >
+          <svg x-show="!darkMode" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+          </svg>
+          <svg x-show="darkMode" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-4 py-8">
+
+      <!-- SECTION: wizard -->
+      <div x-show="!showResults">
+
+        <!-- SECTION: progress -->
+        <nav aria-label="Progression du formulaire" class="mb-8">
+          <ol class="flex items-center justify-center gap-2">
+            <template x-for="s in 6" :key="s">
+              <li class="flex items-center">
+                <div
+                  class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold transition-colors duration-200"
+                  :class="{
+                    'bg-green-500 text-white': s < currentStep,
+                    'bg-blue-500 text-white': s === currentStep,
+                    'bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400': s > currentStep
+                  }"
+                  x-text="s"
+                ></div>
+                <div
+                  x-show="s < 6"
+                  class="w-6 sm:w-10 h-0.5 mx-1"
+                  :class="s < currentStep ? 'bg-green-500' : 'bg-gray-200 dark:bg-gray-700'"
+                ></div>
+              </li>
+            </template>
+          </ol>
+        </nav>
+
+        <!-- SECTION: steps -->
+        <div class="relative overflow-hidden">
+
+          <!-- Step 1: Criticality -->
+          <div
+            x-show="currentStep === 1"
+            x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="opacity-0 translate-x-8"
+            x-transition:enter-end="opacity-100 translate-x-0"
+            x-transition:leave="transition ease-in duration-200"
+            x-transition:leave-start="opacity-100 translate-x-0"
+            x-transition:leave-end="opacity-0 -translate-x-8"
+            role="tabpanel"
+            aria-labelledby="step-1-heading"
+          >
+            <fieldset>
+              <legend id="step-1-heading" class="text-2xl font-bold mb-2">Criticite du service</legend>
+              <p class="text-gray-600 dark:text-gray-400 mb-6">Quel est le niveau de criticite de votre service pour votre activite ?</p>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <template x-for="opt in criticalityOptions" :key="opt.value">
+                  <label
+                    class="relative flex flex-col p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 focus-within:ring-2 focus-within:ring-blue-500 focus-within:ring-offset-2 dark:focus-within:ring-offset-gray-900"
+                    :class="criticality === opt.value
+                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+                      : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-gray-300 dark:hover:border-gray-600'"
+                  >
+                    <input
+                      type="radio"
+                      name="criticality"
+                      :value="opt.value"
+                      x-model="criticality"
+                      class="sr-only"
+                    >
+                    <span class="font-semibold" x-text="opt.label"></span>
+                    <span class="text-sm text-gray-500 dark:text-gray-400 mt-1" x-text="opt.desc"></span>
+                  </label>
+                </template>
+              </div>
+            </fieldset>
+          </div>
+
+          <!-- Step 2: Downtime Tolerance -->
+          <div
+            x-show="currentStep === 2"
+            x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="opacity-0 translate-x-8"
+            x-transition:enter-end="opacity-100 translate-x-0"
+            x-transition:leave="transition ease-in duration-200"
+            x-transition:leave-start="opacity-100 translate-x-0"
+            x-transition:leave-end="opacity-0 -translate-x-8"
+            role="tabpanel"
+            aria-labelledby="step-2-heading"
+          >
+            <fieldset>
+              <legend id="step-2-heading" class="text-2xl font-bold mb-2">Tolerance a l'indisponibilite</legend>
+              <p class="text-gray-600 dark:text-gray-400 mb-6">Quelle duree d'indisponibilite est acceptable pour vos utilisateurs ?</p>
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <template x-for="opt in downtimeToleranceOptions" :key="opt.value">
+                  <label
+                    class="relative flex flex-col p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 focus-within:ring-2 focus-within:ring-blue-500 focus-within:ring-offset-2 dark:focus-within:ring-offset-gray-900"
+                    :class="downtimeTolerance === opt.value
+                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+                      : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-gray-300 dark:hover:border-gray-600'"
+                  >
+                    <input
+                      type="radio"
+                      name="downtimeTolerance"
+                      :value="opt.value"
+                      x-model="downtimeTolerance"
+                      class="sr-only"
+                    >
+                    <span class="font-semibold" x-text="opt.label"></span>
+                    <span class="text-sm text-gray-500 dark:text-gray-400 mt-1" x-text="opt.desc"></span>
+                  </label>
+                </template>
+              </div>
+            </fieldset>
+          </div>
+
+          <!-- Step 3: Support Window -->
+          <div
+            x-show="currentStep === 3"
+            x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="opacity-0 translate-x-8"
+            x-transition:enter-end="opacity-100 translate-x-0"
+            x-transition:leave="transition ease-in duration-200"
+            x-transition:leave-start="opacity-100 translate-x-0"
+            x-transition:leave-end="opacity-0 -translate-x-8"
+            role="tabpanel"
+            aria-labelledby="step-3-heading"
+          >
+            <fieldset>
+              <legend id="step-3-heading" class="text-2xl font-bold mb-2">Fenetre de support</legend>
+              <p class="text-gray-600 dark:text-gray-400 mb-6">Quelle couverture de support est necessaire pour votre service ?</p>
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <template x-for="opt in supportWindowOptions" :key="opt.value">
+                  <label
+                    class="relative flex flex-col p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 focus-within:ring-2 focus-within:ring-blue-500 focus-within:ring-offset-2 dark:focus-within:ring-offset-gray-900"
+                    :class="supportWindow === opt.value
+                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+                      : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-gray-300 dark:hover:border-gray-600'"
+                  >
+                    <input
+                      type="radio"
+                      name="supportWindow"
+                      :value="opt.value"
+                      x-model="supportWindow"
+                      class="sr-only"
+                    >
+                    <span class="font-semibold" x-text="opt.label"></span>
+                    <span class="text-sm text-gray-500 dark:text-gray-400 mt-1" x-text="opt.desc"></span>
+                  </label>
+                </template>
+              </div>
+            </fieldset>
+          </div>
+
+          <!-- Step 4: Budget -->
+          <div
+            x-show="currentStep === 4"
+            x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="opacity-0 translate-x-8"
+            x-transition:enter-end="opacity-100 translate-x-0"
+            x-transition:leave="transition ease-in duration-200"
+            x-transition:leave-start="opacity-100 translate-x-0"
+            x-transition:leave-end="opacity-0 -translate-x-8"
+            role="tabpanel"
+            aria-labelledby="step-4-heading"
+          >
+            <fieldset>
+              <legend id="step-4-heading" class="text-2xl font-bold mb-2">Budget infrastructure</legend>
+              <p class="text-gray-600 dark:text-gray-400 mb-6">Quel budget pouvez-vous allouer a l'infrastructure et aux operations ?</p>
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <template x-for="opt in budgetOptions" :key="opt.value">
+                  <label
+                    class="relative flex flex-col p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 focus-within:ring-2 focus-within:ring-blue-500 focus-within:ring-offset-2 dark:focus-within:ring-offset-gray-900"
+                    :class="budgetLevel === opt.value
+                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+                      : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-gray-300 dark:hover:border-gray-600'"
+                  >
+                    <input
+                      type="radio"
+                      name="budgetLevel"
+                      :value="opt.value"
+                      x-model="budgetLevel"
+                      class="sr-only"
+                    >
+                    <span class="font-semibold" x-text="opt.label"></span>
+                    <span class="text-sm text-gray-500 dark:text-gray-400 mt-1" x-text="opt.desc"></span>
+                  </label>
+                </template>
+              </div>
+            </fieldset>
+          </div>
+
+          <!-- Step 5: RTO -->
+          <div
+            x-show="currentStep === 5"
+            x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="opacity-0 translate-x-8"
+            x-transition:enter-end="opacity-100 translate-x-0"
+            x-transition:leave="transition ease-in duration-200"
+            x-transition:leave-start="opacity-100 translate-x-0"
+            x-transition:leave-end="opacity-0 -translate-x-8"
+            role="tabpanel"
+            aria-labelledby="step-5-heading"
+          >
+            <fieldset>
+              <legend id="step-5-heading" class="text-2xl font-bold mb-2">RTO (Recovery Time Objective)</legend>
+              <p class="text-gray-600 dark:text-gray-400 mb-6">En combien de temps le service doit-il etre retabli apres une panne ?</p>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <template x-for="opt in rtoOptions" :key="opt.value">
+                  <label
+                    class="relative flex flex-col p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 focus-within:ring-2 focus-within:ring-blue-500 focus-within:ring-offset-2 dark:focus-within:ring-offset-gray-900"
+                    :class="rto === opt.value
+                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+                      : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-gray-300 dark:hover:border-gray-600'"
+                  >
+                    <input
+                      type="radio"
+                      name="rto"
+                      :value="opt.value"
+                      x-model="rto"
+                      class="sr-only"
+                    >
+                    <span class="font-semibold" x-text="opt.label"></span>
+                    <span class="text-sm text-gray-500 dark:text-gray-400 mt-1" x-text="opt.desc"></span>
+                  </label>
+                </template>
+              </div>
+            </fieldset>
+          </div>
+
+          <!-- Step 6: RPO -->
+          <div
+            x-show="currentStep === 6"
+            x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="opacity-0 translate-x-8"
+            x-transition:enter-end="opacity-100 translate-x-0"
+            x-transition:leave="transition ease-in duration-200"
+            x-transition:leave-start="opacity-100 translate-x-0"
+            x-transition:leave-end="opacity-0 -translate-x-8"
+            role="tabpanel"
+            aria-labelledby="step-6-heading"
+          >
+            <fieldset>
+              <legend id="step-6-heading" class="text-2xl font-bold mb-2">RPO (Recovery Point Objective)</legend>
+              <p class="text-gray-600 dark:text-gray-400 mb-6">Quelle quantite de donnees pouvez-vous vous permettre de perdre ?</p>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <template x-for="opt in rpoOptions" :key="opt.value">
+                  <label
+                    class="relative flex flex-col p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 focus-within:ring-2 focus-within:ring-blue-500 focus-within:ring-offset-2 dark:focus-within:ring-offset-gray-900"
+                    :class="rpo === opt.value
+                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+                      : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-gray-300 dark:hover:border-gray-600'"
+                  >
+                    <input
+                      type="radio"
+                      name="rpo"
+                      :value="opt.value"
+                      x-model="rpo"
+                      class="sr-only"
+                    >
+                    <span class="font-semibold" x-text="opt.label"></span>
+                    <span class="text-sm text-gray-500 dark:text-gray-400 mt-1" x-text="opt.desc"></span>
+                  </label>
+                </template>
+              </div>
+            </fieldset>
+          </div>
+
+        </div>
+
+        <!-- SECTION: navigation -->
+        <div class="flex justify-between mt-8">
+          <button
+            x-show="currentStep > 1"
+            @click="prevStep()"
+            class="px-6 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
+          >
+            Precedent
+          </button>
+          <div x-show="currentStep <= 1"></div>
+
+          <button
+            x-show="currentStep < 6"
+            @click="nextStep()"
+            :disabled="!isStepValid()"
+            class="px-6 py-2.5 rounded-lg font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
+            :class="isStepValid()
+              ? 'bg-blue-600 hover:bg-blue-700 text-white'
+              : 'bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed'"
+          >
+            Suivant
+          </button>
+
+          <button
+            x-show="currentStep === 6"
+            @click="calculate()"
+            :disabled="!isStepValid()"
+            class="px-6 py-2.5 rounded-lg font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
+            :class="isStepValid()
+              ? 'bg-green-600 hover:bg-green-700 text-white'
+              : 'bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed'"
+          >
+            Calculer
+          </button>
+        </div>
+
+      </div>
+
+      <!-- SECTION: results -->
+      <div
+        x-show="showResults"
+        x-transition:enter="transition ease-out duration-500"
+        x-transition:enter-start="opacity-0 translate-y-4"
+        x-transition:enter-end="opacity-100 translate-y-0"
+        aria-live="polite"
+      >
+
+        <!-- Hero card -->
+        <div
+          class="rounded-2xl p-8 text-white mb-8"
+          :class="result ? tierGradient(result.tier) : ''"
+        >
+          <p class="text-sm font-medium uppercase tracking-wider opacity-80">Recommandation SLA</p>
+          <h2 class="text-4xl font-bold mt-2" x-text="result ? result.tier : ''"></h2>
+          <p class="text-5xl font-bold font-mono mt-2" x-text="result ? result.slaPercent + '%' : ''"></p>
+          <p class="mt-3 opacity-80 text-sm">
+            Score : <span class="font-mono font-semibold" x-text="result ? result.score + '/24' : ''"></span>
+          </p>
+        </div>
+
+        <!-- Cards grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+
+          <!-- Downtime card -->
+          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+            <h3 class="text-lg font-semibold mb-4">Indisponibilite toleree</h3>
+            <dl class="space-y-3">
+              <div class="flex justify-between">
+                <dt class="text-gray-500 dark:text-gray-400">Annuelle</dt>
+                <dd class="font-mono font-semibold" x-text="result ? result.downtimeYear : ''"></dd>
+              </div>
+              <div class="flex justify-between">
+                <dt class="text-gray-500 dark:text-gray-400">Mensuelle</dt>
+                <dd class="font-mono font-semibold" x-text="result ? result.downtimeMonth : ''"></dd>
+              </div>
+              <div class="flex justify-between">
+                <dt class="text-gray-500 dark:text-gray-400">Hebdomadaire</dt>
+                <dd class="font-mono font-semibold" x-text="result ? result.downtimeWeek : ''"></dd>
+              </div>
+            </dl>
+          </div>
+
+          <!-- Cost card -->
+          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+            <h3 class="text-lg font-semibold mb-4">Cout relatif</h3>
+            <dl class="space-y-3">
+              <div class="flex justify-between">
+                <dt class="text-gray-500 dark:text-gray-400">Multiplicateur</dt>
+                <dd class="font-mono font-semibold text-lg" x-text="result ? result.costMultiplier : ''"></dd>
+              </div>
+            </dl>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mt-4">Par rapport a une infrastructure de base sans redondance.</p>
+          </div>
+
+          <!-- Architecture card -->
+          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+            <h3 class="text-lg font-semibold mb-4">Architecture requise</h3>
+            <ul class="space-y-2">
+              <template x-for="item in (result ? result.architecture : [])" :key="item">
+                <li class="flex items-start gap-2">
+                  <svg class="w-5 h-5 text-green-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                  </svg>
+                  <span x-text="item"></span>
+                </li>
+              </template>
+            </ul>
+          </div>
+
+          <!-- Penalties card -->
+          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+            <h3 class="text-lg font-semibold mb-4">Penalites (credits de service)</h3>
+            <ul class="space-y-2">
+              <template x-for="p in (result ? result.penalties : [])" :key="p">
+                <li class="flex items-start gap-2">
+                  <span class="text-amber-500 shrink-0 mt-0.5">&#9679;</span>
+                  <span x-text="p"></span>
+                </li>
+              </template>
+            </ul>
+          </div>
+
+        </div>
+
+        <!-- Alerts -->
+        <template x-if="result && result.warnings.length > 0">
+          <div class="space-y-3 mb-8">
+            <template x-for="w in result.warnings" :key="w.key">
+              <div
+                class="rounded-xl p-4 flex items-start gap-3 border"
+                :class="{
+                  'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800': w.severity === 'error',
+                  'bg-amber-50 dark:bg-amber-900/20 border-amber-200 dark:border-amber-800': w.severity === 'warning',
+                  'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800': w.severity === 'info'
+                }"
+              >
+                <svg class="w-5 h-5 shrink-0 mt-0.5"
+                  :class="{
+                    'text-red-500': w.severity === 'error',
+                    'text-amber-500': w.severity === 'warning',
+                    'text-blue-500': w.severity === 'info'
+                  }"
+                  fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"
+                >
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                </svg>
+                <div>
+                  <p class="font-semibold text-sm"
+                    :class="{
+                      'text-red-800 dark:text-red-200': w.severity === 'error',
+                      'text-amber-800 dark:text-amber-200': w.severity === 'warning',
+                      'text-blue-800 dark:text-blue-200': w.severity === 'info'
+                    }"
+                    x-text="w.severity === 'error' ? 'Erreur' : w.severity === 'warning' ? 'Attention' : 'Information'"
+                  ></p>
+                  <p class="text-sm mt-1"
+                    :class="{
+                      'text-red-700 dark:text-red-300': w.severity === 'error',
+                      'text-amber-700 dark:text-amber-300': w.severity === 'warning',
+                      'text-blue-700 dark:text-blue-300': w.severity === 'info'
+                    }"
+                    x-text="w.message"
+                  ></p>
+                </div>
+              </div>
+            </template>
+          </div>
+        </template>
+
+        <!-- Restart button -->
+        <div class="text-center">
+          <button
+            @click="reset()"
+            class="px-8 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
+          >
+            Recommencer
+          </button>
+        </div>
+
+      </div>
+
+    </main>
+
+    <!-- SECTION: footer -->
+    <footer class="max-w-4xl mx-auto px-4 py-8 mt-8 border-t border-gray-200 dark:border-gray-700">
+      <p class="text-center text-sm text-gray-500 dark:text-gray-400">
+        SLA Advisor &mdash;
+        <a href="https://github.com/xatrix/sla-advisor" class="underline hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded">GitHub</a>
+      </p>
+    </footer>
+
+  </div>
+
+  <!-- SECTION: engine -->
+  <script>
+    // Pure calculation engine - no side effects
+    const SECONDS_PER_YEAR  = 31_536_000;
+    const SECONDS_PER_MONTH = 2_592_000;
+    const SECONDS_PER_WEEK  = 604_800;
+
+    const TIERS = {
+      Bronze: {
+        slaPercent: 99.0,
+        costMultiplier: '1x',
+        architecture: [
+          'Instance unique (pas de redondance)',
+          'Monitoring basique (ping de disponibilite)',
+          'Procedures de reprise manuelles',
+          'Zone de disponibilite unique',
+          'Sauvegardes periodiques (quotidiennes)',
+          'Infrastructure mutualisee acceptable',
+        ],
+        penalties: [
+          '< 99.0% : 10% de credit',
+          '< 95.0% : 25% de credit',
+          '< 90.0% : 50% de credit',
+        ],
+        useCases: ['Outils internes', 'Environnements de developpement', 'Prototypes'],
+      },
+      Silver: {
+        slaPercent: 99.9,
+        costMultiplier: '1.5-3x',
+        architecture: [
+          'Repartiteur de charge avec health checks',
+          'Redemarrage automatique en cas de panne',
+          'Redondance mono-zone (2+ instances)',
+          'Sauvegardes automatisees (horaires)',
+          'Alerting basique (email / Slack)',
+          'Runbooks de reponse aux incidents',
+        ],
+        penalties: [
+          '< 99.9% : 10% de credit',
+          '< 99.0% : 25% de credit',
+          '< 95.0% : 50% de credit',
+        ],
+        useCases: ['Applications metier standard', 'SaaS B2B', 'Sites web professionnels'],
+      },
+      Gold: {
+        slaPercent: 99.95,
+        costMultiplier: '3-5x',
+        architecture: [
+          'Deploiement multi-zone (2+ zones de disponibilite)',
+          'Auto-scaling groups',
+          'Failover automatique (base de donnees, compute)',
+          'Deploiements blue-green ou canary',
+          'CDN pour les assets statiques',
+          'Monitoring centralise (Datadog, Grafana)',
+          'Astreinte avec reponse < 30 min',
+          'Sauvegardes avec restauration a un point dans le temps',
+        ],
+        penalties: [
+          '< 99.95% : 10% de credit',
+          '< 99.0% : 25% de credit',
+          '< 95.0% : 100% de credit',
+        ],
+        useCases: ['Applications client critiques', 'E-commerce', 'Plateformes SaaS'],
+      },
+      Platinum: {
+        slaPercent: 99.99,
+        costMultiplier: '5-15x',
+        architecture: [
+          'Deploiement multi-zone actif-actif',
+          'Pipeline de deploiement zero-downtime',
+          'Replication BDD avec failover automatique (< 30s)',
+          'Observabilite complete (metriques, logs, traces, synthetiques)',
+          'Auto-scaling avec politiques predictives',
+          'Equipe de reponse aux incidents dediee (24/7)',
+          'Chaos engineering (injection de pannes periodique)',
+          'Infrastructure immutable (IaC)',
+          'Service mesh pour la gestion du trafic',
+          'Rollback automatique sur pic de taux d\'erreur',
+        ],
+        penalties: [
+          '< 99.99% : 10% de credit',
+          '< 99.9% : 25% de credit',
+          '< 99.0% : 100% de credit',
+        ],
+        useCases: ['Services financiers', 'Sante', 'Infrastructure critique'],
+      },
+      Diamond: {
+        slaPercent: 99.999,
+        costMultiplier: '10-50x',
+        architecture: [
+          'Deploiement multi-region actif-actif (3+ regions)',
+          'Repartition de charge globale avec failover < 1s',
+          'Replication synchrone des donnees inter-regions',
+          'Programme de chaos engineering (continu)',
+          'RTO < 5 min, RPO ~ 0 (zero perte de donnees)',
+          'Detection et remediation automatique des incidents',
+          'Redondance N+2 a chaque couche',
+          'Equipe SRE dediee (multiples ingenieurs 24/7)',
+          'Circuit breakers, bulkheads et budgets de retry',
+          'Deploiement continu avec analyse canary automatisee',
+          'Exercices de reprise apres sinistre trimestriels',
+        ],
+        penalties: [
+          '< 99.999% : 10% de credit',
+          '< 99.99% : 25% de credit',
+          '< 99.9% : 100% de credit',
+        ],
+        useCases: ['Securite des personnes', 'Transactions financieres temps reel', 'Infrastructure critique nationale'],
+      },
+    };
+
+    const SCORING = {
+      criticality:       { low: 0, medium: 1, high: 3, critical: 4 },
+      downtimeTolerance: { hours: 0, minutes: 2, seconds: 4 },
+      supportWindow:     { business: 0, extended: 2, '24x7': 4 },
+      budgetLevel:       { low: 0, medium: 2, high: 4 },
+      rto:               { '4h': 0, '1h': 1, '15min': 3, '5min': 4 },
+      rpo:               { '24h': 0, '1h': 1, '15min': 3, realtime: 4 },
+    };
+
+    const TIER_ORDER = ['Bronze', 'Silver', 'Gold', 'Platinum', 'Diamond'];
+
+    const TIER_THRESHOLDS = [
+      { minScore: 20, tier: 'Diamond' },
+      { minScore: 15, tier: 'Platinum' },
+      { minScore: 10, tier: 'Gold' },
+      { minScore: 5,  tier: 'Silver' },
+      { minScore: 0,  tier: 'Bronze' },
+    ];
+
+    const BUDGET_CAP = {
+      low:    'Silver',
+      medium: 'Platinum',
+      high:   null, // no cap
+    };
+
+    function formatDuration(seconds) {
+      if (seconds < 1) return '< 1s';
+      const days = Math.floor(seconds / 86400);
+      seconds %= 86400;
+      const hours = Math.floor(seconds / 3600);
+      seconds %= 3600;
+      const minutes = Math.floor(seconds / 60);
+      const secs = Math.round(seconds % 60);
+
+      const parts = [];
+      if (days > 0) parts.push(days + 'j');
+      if (hours > 0) parts.push(hours + 'h');
+      if (minutes > 0) parts.push(minutes + 'min');
+      if (secs > 0) parts.push(secs + 's');
+      return parts.join(' ') || '< 1s';
+    }
+
+    function computeSLARecommendation(inputs) {
+      // Calculate score
+      const scores = {};
+      let totalScore = 0;
+      for (const key of Object.keys(SCORING)) {
+        scores[key] = SCORING[key][inputs[key]] || 0;
+        totalScore += scores[key];
+      }
+
+      // Map to tier
+      let tier = 'Bronze';
+      for (const t of TIER_THRESHOLDS) {
+        if (totalScore >= t.minScore) {
+          tier = t.tier;
+          break;
+        }
+      }
+
+      // Store uncapped tier for warning
+      const uncappedTier = tier;
+
+      // Apply budget cap
+      const capTier = BUDGET_CAP[inputs.budgetLevel];
+      if (capTier) {
+        const capIndex = TIER_ORDER.indexOf(capTier);
+        const tierIndex = TIER_ORDER.indexOf(tier);
+        if (tierIndex > capIndex) {
+          tier = capTier;
+        }
+      }
+
+      // Get tier data
+      const tierData = TIERS[tier];
+      const slaFraction = 1 - (tierData.slaPercent / 100);
+
+      // Calculate downtimes
+      const downtimeYear  = formatDuration(SECONDS_PER_YEAR * slaFraction);
+      const downtimeMonth = formatDuration(SECONDS_PER_MONTH * slaFraction);
+      const downtimeWeek  = formatDuration(SECONDS_PER_WEEK * slaFraction);
+
+      // Detect warnings
+      const warnings = detectWarnings(inputs, tier, uncappedTier, totalScore);
+
+      return {
+        tier,
+        slaPercent: tierData.slaPercent,
+        downtimeYear,
+        downtimeMonth,
+        downtimeWeek,
+        architecture: tierData.architecture,
+        costMultiplier: tierData.costMultiplier,
+        penalties: tierData.penalties,
+        warnings,
+        score: totalScore,
+        scores,
+        uncappedTier,
+      };
+    }
+
+    function detectWarnings(inputs, tier, uncappedTier, totalScore) {
+      const warnings = [];
+
+      // 1. Budget cap active
+      if (tier !== uncappedTier) {
+        warnings.push({
+          key: 'budget_cap',
+          severity: 'warning',
+          message: `Vos besoins techniques indiquent le tier ${uncappedTier}, mais votre budget limite la recommandation a ${tier}.`,
+        });
+      }
+
+      // 2. High criticality + low budget
+      if ((inputs.criticality === 'high' || inputs.criticality === 'critical') && inputs.budgetLevel === 'low') {
+        warnings.push({
+          key: 'critical_low_budget',
+          severity: 'error',
+          message: 'Criticite elevee avec un budget faible : c\'est un risque majeur. Envisagez d\'augmenter le budget ou de reduire les attentes de disponibilite.',
+        });
+      }
+
+      // 3. Critical + RTO 4h
+      if (inputs.criticality === 'critical' && inputs.rto === '4h') {
+        warnings.push({
+          key: 'critical_slow_rto',
+          severity: 'warning',
+          message: 'Un RTO de 4h est trop eleve pour un service critique. Visez un RTO de 15 minutes ou moins.',
+        });
+      }
+
+      // 4. Critical + RPO 24h
+      if (inputs.criticality === 'critical' && inputs.rpo === '24h') {
+        warnings.push({
+          key: 'critical_high_rpo',
+          severity: 'warning',
+          message: 'Un RPO de 24h signifie accepter la perte d\'une journee de donnees pour un service critique.',
+        });
+      }
+
+      // 5. Tolerance seconds + relaxed RTO
+      if (inputs.downtimeTolerance === 'seconds' && (inputs.rto === '4h' || inputs.rto === '1h')) {
+        warnings.push({
+          key: 'tolerance_rto_mismatch',
+          severity: 'warning',
+          message: `Vous tolerez seulement des secondes d'indisponibilite mais votre RTO est de ${inputs.rto}. Ces objectifs sont incoherents.`,
+        });
+      }
+
+      // 6. 24/7 support + low budget
+      if (inputs.supportWindow === '24x7' && inputs.budgetLevel === 'low') {
+        warnings.push({
+          key: 'support_budget_mismatch',
+          severity: 'warning',
+          message: 'Le support 24/7 necessite une equipe d\'astreinte, difficilement compatible avec un budget faible.',
+        });
+      }
+
+      // 7. Low criticality + high score (over-engineering)
+      if (inputs.criticality === 'low' && totalScore >= 15) {
+        warnings.push({
+          key: 'overengineered',
+          severity: 'info',
+          message: 'Les exigences sont elevees pour un service de faible criticite. Assurez-vous que ce niveau d\'investissement est justifie.',
+        });
+      }
+
+      // 8. Realtime RPO + low budget
+      if (inputs.rpo === 'realtime' && inputs.budgetLevel === 'low') {
+        warnings.push({
+          key: 'realtime_rpo_low_budget',
+          severity: 'error',
+          message: 'Un RPO temps reel necessite une replication synchrone multi-region, incompatible avec un budget faible.',
+        });
+      }
+
+      // 9. Diamond warning
+      if (tier === 'Diamond') {
+        warnings.push({
+          key: 'diamond_complexity',
+          severity: 'info',
+          message: 'Le tier Diamond (99.999%) est extremement couteux et complexe a operer. Verifiez qu\'il est reellement necessaire.',
+        });
+      }
+
+      // 10. Business hours support + tier >= Platinum
+      const tierIndex = TIER_ORDER.indexOf(tier);
+      if (inputs.supportWindow === 'business' && tierIndex >= 3) {
+        warnings.push({
+          key: 'support_tier_mismatch',
+          severity: 'warning',
+          message: 'Un support en heures ouvrables est insuffisant pour ce niveau de SLA. Les nuits et week-ends consommeront votre budget d\'indisponibilite.',
+        });
+      }
+
+      return warnings;
+    }
+  </script>
+
+  <!-- SECTION: alpine-data -->
+  <script>
+    function slaCalculator() {
+      return {
+        // Dark mode
+        darkMode: localStorage.getItem('darkMode')
+          ? localStorage.getItem('darkMode') === 'true'
+          : window.matchMedia('(prefers-color-scheme: dark)').matches,
+
+        toggleDarkMode() {
+          this.darkMode = !this.darkMode;
+          localStorage.setItem('darkMode', this.darkMode);
+        },
+
+        // Wizard state
+        currentStep: 1,
+        showResults: false,
+        result: null,
+
+        // Inputs
+        criticality: null,
+        downtimeTolerance: null,
+        supportWindow: null,
+        budgetLevel: null,
+        rto: null,
+        rpo: null,
+
+        // Step options (data-driven)
+        get criticalityOptions() {
+          return [
+            { value: 'low', label: 'Faible', desc: 'Outils internes, environnements de dev' },
+            { value: 'medium', label: 'Moyen', desc: 'Applications metier non critiques' },
+            { value: 'high', label: 'Eleve', desc: 'Applications client, e-commerce' },
+            { value: 'critical', label: 'Critique', desc: 'Services financiers, sante, securite' },
+          ];
+        },
+
+        get downtimeToleranceOptions() {
+          return [
+            { value: 'hours', label: 'Heures', desc: 'Quelques heures d\'indisponibilite sont acceptables' },
+            { value: 'minutes', label: 'Minutes', desc: 'L\'indisponibilite doit rester sous quelques minutes' },
+            { value: 'seconds', label: 'Secondes', desc: 'Chaque seconde d\'indisponibilite a un impact' },
+          ];
+        },
+
+        get supportWindowOptions() {
+          return [
+            { value: 'business', label: 'Heures ouvrables', desc: 'Lun-Ven, 9h-18h' },
+            { value: 'extended', label: 'Etendu', desc: 'Lun-Sam, 7h-22h' },
+            { value: '24x7', label: '24/7', desc: 'Support continu, nuits et week-ends inclus' },
+          ];
+        },
+
+        get budgetOptions() {
+          return [
+            { value: 'low', label: 'Faible', desc: 'Budget limite, infrastructure minimale' },
+            { value: 'medium', label: 'Moyen', desc: 'Budget raisonnable pour la redondance' },
+            { value: 'high', label: 'Eleve', desc: 'Budget consequent pour haute disponibilite' },
+          ];
+        },
+
+        get rtoOptions() {
+          return [
+            { value: '4h', label: '4 heures', desc: 'Reprise en demi-journee acceptable' },
+            { value: '1h', label: '1 heure', desc: 'Reprise rapide necessaire' },
+            { value: '15min', label: '15 minutes', desc: 'Failover automatique requis' },
+            { value: '5min', label: '5 minutes', desc: 'Reprise quasi-instantanee' },
+          ];
+        },
+
+        get rpoOptions() {
+          return [
+            { value: '24h', label: '24 heures', desc: 'Perte d\'une journee de donnees acceptable' },
+            { value: '1h', label: '1 heure', desc: 'Sauvegardes frequentes necessaires' },
+            { value: '15min', label: '15 minutes', desc: 'Replication asynchrone requise' },
+            { value: 'realtime', label: 'Temps reel', desc: 'Zero perte de donnees (replication synchrone)' },
+          ];
+        },
+
+        // Step validation
+        isStepValid() {
+          switch (this.currentStep) {
+            case 1: return this.criticality !== null;
+            case 2: return this.downtimeTolerance !== null;
+            case 3: return this.supportWindow !== null;
+            case 4: return this.budgetLevel !== null;
+            case 5: return this.rto !== null;
+            case 6: return this.rpo !== null;
+            default: return false;
+          }
+        },
+
+        // Navigation
+        nextStep() {
+          if (this.isStepValid() && this.currentStep < 6) {
+            this.currentStep++;
+          }
+        },
+
+        prevStep() {
+          if (this.currentStep > 1) {
+            this.currentStep--;
+          }
+        },
+
+        // Calculate
+        calculate() {
+          if (!this.isStepValid()) return;
+          this.result = computeSLARecommendation({
+            criticality: this.criticality,
+            downtimeTolerance: this.downtimeTolerance,
+            supportWindow: this.supportWindow,
+            budgetLevel: this.budgetLevel,
+            rto: this.rto,
+            rpo: this.rpo,
+          });
+          this.showResults = true;
+        },
+
+        // Reset
+        reset() {
+          this.currentStep = 1;
+          this.showResults = false;
+          this.result = null;
+          this.criticality = null;
+          this.downtimeTolerance = null;
+          this.supportWindow = null;
+          this.budgetLevel = null;
+          this.rto = null;
+          this.rpo = null;
+        },
+
+        // Tier gradient mapping
+        tierGradient(tier) {
+          const gradients = {
+            Bronze:   'bg-gradient-to-r from-amber-600 to-amber-500',
+            Silver:   'bg-gradient-to-r from-gray-500 to-gray-400',
+            Gold:     'bg-gradient-to-r from-yellow-500 to-yellow-400',
+            Platinum: 'bg-gradient-to-r from-indigo-600 to-indigo-500',
+            Diamond:  'bg-gradient-to-r from-cyan-600 to-cyan-400',
+          };
+          return gradients[tier] || '';
+        },
+      };
+    }
+  </script>
+
+  <!-- SECTION: alpinejs -->
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+</body>
+</html>
