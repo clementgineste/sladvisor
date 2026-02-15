@@ -2,7 +2,7 @@
 
 > Calculateur interactif de SLA — répondez à quelques questions sur votre service et obtenez une recommandation de niveau de SLA avec les implications techniques, financières et opérationnelles.
 
-🔗 **[Essayer en ligne](https://xatrix.github.io/sla-advisor/)**
+🔗 **[Essayer en ligne](https://clementgineste.github.io/sladvisor/)**
 
 ## Pourquoi ?
 
@@ -34,8 +34,8 @@ Volontairement minimaliste :
 
 ```bash
 # Cloner
-git clone git@github.com:XaTriX/sla-advisor.git
-cd sla-advisor
+git clone git@github.com:clementgineste/sladvisor.git
+cd sladvisor
 
 # Ouvrir directement dans le navigateur
 open index.html

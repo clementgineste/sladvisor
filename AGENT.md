@@ -4,7 +4,7 @@
 
 Single-page interactive SLA calculator/advisor. Users answer a few questions about their service requirements and get a recommended SLA tier with detailed implications (downtime, architecture, cost, penalties).
 
-**Live URL**: `https://xatrix.github.io/sla-advisor/` (GitHub Pages)
+**Live URL**: `https://clementgineste.github.io/sladvisor/` (GitHub Pages)
 
 ## Tech Stack
 
