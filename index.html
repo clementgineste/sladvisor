@@ -31,10 +31,6 @@
       var stored = localStorage.getItem('darkMode');
       var dark = stored !== null ? stored === 'true' : window.matchMedia('(prefers-color-scheme: dark)').matches;
       if (dark) document.documentElement.classList.add('dark');
-      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
-        localStorage.removeItem('darkMode');
-        document.documentElement.classList.toggle('dark', e.matches);
-      });
     })();
   </script>
 
@@ -856,6 +852,12 @@
 
         // Focus first card after step transition
         init() {
+          // Sync dark mode with system preference changes
+          window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+            localStorage.removeItem('darkMode');
+            this.darkMode = e.matches;
+            document.documentElement.classList.toggle('dark', e.matches);
+          });
           // Focus first card on page load
           setTimeout(() => {
             const label = document.querySelector('#step-1-heading')?.closest('fieldset')?.querySelector('label[tabindex="0"]');
