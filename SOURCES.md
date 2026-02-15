@@ -1,43 +1,43 @@
-# Sources & références
+# Sources & References
 
-Ressources utiles pour comprendre les SLA, SLO, SLI et les concepts associés utilisés dans SLAdvisor.
+Useful resources for understanding SLA, SLO, SLI and related concepts used in SLAdvisor.
 
-## Guides fondamentaux
+## Foundational Guides
 
 - **[The Comprehensive Guide on SLIs, SLOs, and Error Budgets](https://web.archive.org/web/2024/https://f.hubspotusercontent00.net/hubfs/5408306/Collateral%20Assets/The%20Comprehensive%20Guide%20on%20SLIs,%20SLOs,%20and%20Error%20Budgets.pdf)** (PDF)
-  Par Blameless — guide complet couvrant les indicateurs de fiabilité, les objectifs et les budgets d'erreur. Lien via Wayback Machine.
+  By Blameless — comprehensive guide covering reliability indicators, objectives and error budgets. Wayback Machine link.
 
 - **[SLI, SLO et Error Budget : le langage commun entre ops et métier](https://blog.stephane-robert.info/docs/observabilite/fondamentaux/sli-slo-sla/)**
-  Par Stéphane Robert — excellente introduction en français aux concepts SLI/SLO/SLA avec exemples pratiques.
+  By Stéphane Robert — excellent introduction to SLI/SLO/SLA concepts with practical examples (French).
 
 - **[SRE fundamentals: SLIs vs SLOs vs SLAs](https://cloud.google.com/blog/products/devops-sre/sre-fundamentals-slis-slas-and-slos)**
-  Par Google Cloud — article de référence qui distingue clairement les trois concepts.
+  By Google Cloud — reference article clearly distinguishing the three concepts.
 
-## Livres
+## Books
 
 - **[Site Reliability Engineering — How Google Runs Production Systems](https://sre.google/sre-book/table-of-contents/)**
-  Le livre SRE de Google, lisible gratuitement en ligne. Chapitres clés : *Service Level Objectives* (ch. 4), *Embracing Risk* (ch. 3).
+  Google's SRE book, free to read online. Key chapters: *Service Level Objectives* (ch. 4), *Embracing Risk* (ch. 3).
 
 - **[The Site Reliability Workbook](https://sre.google/workbook/table-of-contents/)**
-  Companion pratique du livre SRE, avec des exercices et cas concrets sur les SLO et error budgets.
+  Practical companion to the SRE book, with exercises and real-world cases on SLOs and error budgets.
 
-## Outils de référence
+## Reference Tools
 
 - **[uptime.is](https://uptime.is/)**
-  Calculateur de downtime par pourcentage de SLA. Permet de visualiser instantanément le temps d'indisponibilité toléré par jour, semaine, mois et année.
+  Downtime calculator by SLA percentage. Instantly visualize tolerated downtime per day, week, month and year.
 
-## SLA des cloud providers
+## Cloud Provider SLAs
 
 - **[AWS Service Level Agreements](https://aws.amazon.com/legal/service-level-agreements/)**
-  Liste complète des SLA par service AWS (EC2 : 99.99%, S3 : 99.9%, etc.).
+  Complete list of SLAs by AWS service (EC2: 99.99%, S3: 99.9%, etc.).
 
 - **[Google Cloud SLA](https://cloud.google.com/terms/sla)**
-  SLA par service GCP (Compute Engine : 99.99%, Cloud Storage : 99.9%, etc.).
+  SLAs by GCP service (Compute Engine: 99.99%, Cloud Storage: 99.9%, etc.).
 
 - **[Microsoft Azure SLA](https://www.microsoft.com/licensing/docs/view/Service-Level-Agreements-SLA-for-Online-Services)**
-  SLA par service Azure (VMs : 99.9%-99.99%, SQL Database : 99.99%, etc.).
+  SLAs by Azure service (VMs: 99.9%-99.99%, SQL Database: 99.99%, etc.).
 
-## Articles complémentaires
+## Additional Reading
 
 - **[SRE Fundamentals: Differences Between SLI vs. SLO vs. SLA](https://thenewstack.io/sre-fundamentals-differences-between-sli-vs-slo-vs-sla/)** — The New Stack
 

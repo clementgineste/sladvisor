@@ -1,54 +1,53 @@
 # SLA Advisor
 
-> Calculateur interactif de SLA — répondez à quelques questions sur votre service et obtenez une recommandation de niveau de SLA avec les implications techniques, financières et opérationnelles.
+> Interactive SLA calculator — answer a few questions about your service requirements and get a recommended SLA tier with technical, financial and operational implications.
 
-🔗 **[Essayer en ligne](https://sladvisor.dev)**
+🔗 **[Try it live](https://sladvisor.dev)**
 
-## Pourquoi ?
+## Why?
 
-Quand un client ou un PM demande "on veut du 99.99% de disponibilité", il ne réalise pas toujours ce que ça implique :
-- **99.9%** → ~8h45 d'indisponibilité par an — un seul serveur avec monitoring peut suffire
-- **99.99%** → ~52 minutes par an — multi-AZ, auto-scaling, blue-green obligatoires
-- **99.999%** → ~5 minutes par an — architecture active-active multi-région, coûts x10-50
+When a client or PM asks for "99.99% availability", they don't always realize what it takes:
+- **99.9%** → ~8h45min downtime/year — a single server with monitoring may suffice
+- **99.99%** → ~52 minutes/year — multi-AZ, auto-scaling, blue-green deployments required
+- **99.999%** → ~5 minutes/year — active-active multi-region, 10-50x cost multiplier
 
-Cet outil fait le pont entre le besoin business et la réalité technique.
+This tool bridges the gap between business needs and technical reality.
 
-## Fonctionnalités
+## Features
 
-- 🎯 Recommandation de tier SLA basée sur 6 critères (criticité, tolérance, support, budget, RTO, RPO)
-- ⏱️ Calcul précis du temps d'indisponibilité (annuel, mensuel, hebdomadaire)
-- 🏗️ Implications architecturales pour chaque niveau
-- ⚠️ Alertes d'incohérence (budget faible + SLA élevé)
-- 📊 Comparaison des tiers côte à côte
-- 🌙 Mode sombre
+- SLA tier recommendation based on 6 criteria (criticality, tolerance, support, budget, RTO, RPO)
+- Precise downtime calculation (yearly, monthly, weekly)
+- Architecture implications for each tier
+- Inconsistency warnings (low budget + high SLA)
+- Side-by-side tier comparison
+- Dark mode
 
 ## Stack
 
-Volontairement minimaliste :
-- **HTML** unique
-- **[Alpine.js](https://alpinejs.dev/)** pour la réactivité (~15kb, via CDN)
-- **[Tailwind CSS](https://tailwindcss.com/)** pour le styling (Play CDN)
-- Zéro build, zéro dépendance, zéro backend
+Intentionally minimal:
+- Single **HTML** file
+- **[Alpine.js](https://alpinejs.dev/)** for reactivity (~15kb, via CDN)
+- **[Tailwind CSS](https://tailwindcss.com/)** for styling (Play CDN)
+- Zero build, zero dependencies, zero backend
 
-## Développement
+## Development
 
 ```bash
-# Cloner
 git clone git@github.com:clementgineste/sladvisor.git
 cd sladvisor
 
-# Ouvrir directement dans le navigateur
+# Open directly in browser
 open index.html
-# ou
+# or
 python3 -m http.server 8080
 ```
 
-Pas de `npm install`, pas de build. Éditer `index.html`, rafraîchir le navigateur.
+No `npm install`, no build step. Edit `index.html`, refresh the browser.
 
-## Déploiement
+## Deployment
 
-GitHub Pages depuis la branche `main`, racine `/`.
+GitHub Pages from the `main` branch, root `/`. Custom domain: `sladvisor.dev`.
 
-## Licence
+## License
 
 MIT
