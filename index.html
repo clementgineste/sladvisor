@@ -510,6 +510,45 @@
           </div>
         </template>
 
+        <!-- Comparison table -->
+        <div class="mb-8">
+          <h3 class="text-lg font-semibold mb-4">Comparaison des tiers</h3>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm border-collapse">
+              <thead>
+                <tr class="border-b border-gray-200 dark:border-gray-700">
+                  <th class="text-left py-3 px-3 font-semibold text-gray-500 dark:text-gray-400">Tier</th>
+                  <th class="text-right py-3 px-3 font-semibold text-gray-500 dark:text-gray-400">SLA</th>
+                  <th class="text-right py-3 px-3 font-semibold text-gray-500 dark:text-gray-400 hidden sm:table-cell">Indispo. / an</th>
+                  <th class="text-right py-3 px-3 font-semibold text-gray-500 dark:text-gray-400 hidden sm:table-cell">Indispo. / mois</th>
+                  <th class="text-right py-3 px-3 font-semibold text-gray-500 dark:text-gray-400">Coût</th>
+                  <th class="text-left py-3 px-3 font-semibold text-gray-500 dark:text-gray-400 hidden md:table-cell">Cas d'usage</th>
+                </tr>
+              </thead>
+              <tbody>
+                <template x-for="t in allTiers" :key="t.name">
+                  <tr
+                    class="border-b border-gray-100 dark:border-gray-800 transition-colors"
+                    :class="tierBadgeClass(t.name)"
+                  >
+                    <td class="py-3 px-3">
+                      <span class="inline-flex items-center gap-1.5">
+                        <span class="font-semibold" x-text="t.name"></span>
+                        <span x-show="result && result.tier === t.name" class="text-xs bg-blue-500 text-white px-1.5 py-0.5 rounded-full">recommandé</span>
+                      </span>
+                    </td>
+                    <td class="text-right py-3 px-3 font-mono" x-text="t.slaPercent + '%'"></td>
+                    <td class="text-right py-3 px-3 font-mono hidden sm:table-cell" x-text="t.downtimeYear"></td>
+                    <td class="text-right py-3 px-3 font-mono hidden sm:table-cell" x-text="t.downtimeMonth"></td>
+                    <td class="text-right py-3 px-3 font-mono" x-text="t.costMultiplier"></td>
+                    <td class="py-3 px-3 text-gray-500 dark:text-gray-400 hidden md:table-cell" x-text="t.useCases.join(', ')"></td>
+                  </tr>
+                </template>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
         <!-- Action buttons -->
         <div class="flex justify-center gap-3">
           <button
@@ -1056,6 +1095,22 @@
           this.rpo = '24h';
         },
 
+        // All tiers for comparison table
+        get allTiers() {
+          return ['Bronze', 'Silver', 'Gold', 'Platinum', 'Diamond'].map(name => {
+            const t = TIERS[name];
+            const frac = 1 - (t.slaPercent / 100);
+            return {
+              name,
+              slaPercent: t.slaPercent,
+              downtimeYear: formatDuration(SECONDS_PER_YEAR * frac),
+              downtimeMonth: formatDuration(SECONDS_PER_MONTH * frac),
+              costMultiplier: t.costMultiplier,
+              useCases: t.useCases,
+            };
+          });
+        },
+
         // Tier gradient mapping
         tierGradient(tier) {
           const gradients = {
@@ -1066,6 +1121,28 @@
             Diamond:  'bg-gradient-to-r from-cyan-600 to-cyan-400',
           };
           return gradients[tier] || '';
+        },
+
+        tierBadgeClass(tier) {
+          const styles = {
+            Bronze:   'bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300',
+            Silver:   'bg-gray-100 text-gray-700 dark:bg-gray-700/40 dark:text-gray-300',
+            Gold:     'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300',
+            Platinum: 'bg-indigo-100 text-indigo-800 dark:bg-indigo-900/40 dark:text-indigo-300',
+            Diamond:  'bg-cyan-100 text-cyan-800 dark:bg-cyan-900/40 dark:text-cyan-300',
+          };
+          return styles[tier] || '';
+        },
+
+        tierBorderClass(tier) {
+          const styles = {
+            Bronze:   'border-l-amber-500',
+            Silver:   'border-l-gray-400',
+            Gold:     'border-l-yellow-500',
+            Platinum: 'border-l-indigo-500',
+            Diamond:  'border-l-cyan-500',
+          };
+          return styles[tier] || '';
         },
       };
     }
