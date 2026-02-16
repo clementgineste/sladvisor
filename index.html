@@ -1,18 +1,18 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
   <!-- SECTION: meta -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="SLAdvisor.dev - Calculez et recommandez le niveau de SLA adapté à vos besoins">
+  <meta name="description" content="SLAdvisor.dev - Calculate and recommend the right SLA tier for your needs">
   <meta property="og:title" content="SLAdvisor.dev">
-  <meta property="og:description" content="Outil interactif de recommandation SLA pour vos services">
+  <meta property="og:description" content="Interactive SLA recommendation tool for your services">
   <meta property="og:type" content="website">
   <meta property="og:image" content="https://sladvisor.dev/og-image.png">
   <meta property="og:url" content="https://sladvisor.dev">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="SLAdvisor.dev">
-  <meta name="twitter:description" content="Outil interactif de recommandation SLA pour vos services">
+  <meta name="twitter:description" content="Interactive SLA recommendation tool for your services">
   <meta name="twitter:image" content="https://sladvisor.dev/og-image.png">
   <link rel="icon" href="/favicon.ico" sizes="48x32x16">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
@@ -60,7 +60,7 @@
       <div class="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
         <div class="flex items-center gap-3">
           <a @click.prevent="reset()" href="#" class="text-xl font-bold tracking-tight hover:opacity-80 transition-opacity"><span class="text-gray-400 dark:text-gray-500">SL</span><span class="text-blue-500">Advisor</span><span class="text-gray-400 dark:text-gray-500">.dev</span></a>
-          <span class="hidden sm:inline text-sm text-gray-400 dark:text-gray-500 border-l border-gray-300 dark:border-gray-600 pl-3">Quel SLA pour votre service ?</span>
+          <span class="hidden sm:inline text-sm text-gray-400 dark:text-gray-500 border-l border-gray-300 dark:border-gray-600 pl-3">What SLA does your service need?</span>
         </div>
         <div class="flex items-center gap-1">
         <a href="https://github.com/clementgineste/sladvisor" target="_blank" rel="noopener" aria-label="GitHub" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
@@ -69,7 +69,7 @@
         <button
           @click="toggleDarkMode()"
           class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
-          :aria-label="darkMode ? 'Passer en mode clair' : 'Passer en mode sombre'"
+          :aria-label="darkMode ? 'Switch to light mode' : 'Switch to dark mode'"
         >
           <svg x-show="!darkMode" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
@@ -88,7 +88,7 @@
       <div x-show="!showResults">
 
         <!-- SECTION: progress -->
-        <nav aria-label="Progression du formulaire" class="mb-8">
+        <nav aria-label="Form progress" class="mb-8">
           <ol class="flex items-center justify-center gap-2">
             <template x-for="s in 6" :key="s">
               <li class="flex items-center">
@@ -128,8 +128,8 @@
             aria-labelledby="step-1-heading"
           >
             <fieldset>
-              <legend id="step-1-heading" class="text-2xl font-bold mb-2">Criticité du service</legend>
-              <p class="text-gray-600 dark:text-gray-400 mb-6">Quel est le niveau de criticité de votre service pour votre activité ?</p>
+              <legend id="step-1-heading" class="text-2xl font-bold mb-2">Service criticality</legend>
+              <p class="text-gray-600 dark:text-gray-400 mb-6">How critical is this service to your business?</p>
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <template x-for="opt in criticalityOptions" :key="opt.value">
                   <label
@@ -169,8 +169,8 @@
             aria-labelledby="step-2-heading"
           >
             <fieldset>
-              <legend id="step-2-heading" class="text-2xl font-bold mb-2">Tolérance à l'indisponibilité</legend>
-              <p class="text-gray-600 dark:text-gray-400 mb-6">Quelle durée d'indisponibilité est acceptable pour vos utilisateurs ?</p>
+              <legend id="step-2-heading" class="text-2xl font-bold mb-2">Downtime tolerance</legend>
+              <p class="text-gray-600 dark:text-gray-400 mb-6">How much downtime is acceptable for your users?</p>
               <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <template x-for="opt in downtimeToleranceOptions" :key="opt.value">
                   <label
@@ -210,8 +210,8 @@
             aria-labelledby="step-3-heading"
           >
             <fieldset>
-              <legend id="step-3-heading" class="text-2xl font-bold mb-2">Fenêtre de support</legend>
-              <p class="text-gray-600 dark:text-gray-400 mb-6">Quelle couverture de support est nécessaire pour votre service ?</p>
+              <legend id="step-3-heading" class="text-2xl font-bold mb-2">Support window</legend>
+              <p class="text-gray-600 dark:text-gray-400 mb-6">What support coverage does this service require?</p>
               <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <template x-for="opt in supportWindowOptions" :key="opt.value">
                   <label
@@ -251,8 +251,8 @@
             aria-labelledby="step-4-heading"
           >
             <fieldset>
-              <legend id="step-4-heading" class="text-2xl font-bold mb-2">Budget infrastructure</legend>
-              <p class="text-gray-600 dark:text-gray-400 mb-6">Quel budget pouvez-vous allouer à l'infrastructure et aux opérations ?</p>
+              <legend id="step-4-heading" class="text-2xl font-bold mb-2">Infrastructure budget</legend>
+              <p class="text-gray-600 dark:text-gray-400 mb-6">What budget can you allocate to infrastructure and operations?</p>
               <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <template x-for="opt in budgetOptions" :key="opt.value">
                   <label
@@ -293,7 +293,7 @@
           >
             <fieldset>
               <legend id="step-5-heading" class="text-2xl font-bold mb-2">RTO (Recovery Time Objective)</legend>
-              <p class="text-gray-600 dark:text-gray-400 mb-6">En combien de temps le service doit-il être rétabli après une panne ?</p>
+              <p class="text-gray-600 dark:text-gray-400 mb-6">How quickly must the service recover after an outage?</p>
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <template x-for="opt in rtoOptions" :key="opt.value">
                   <label
@@ -334,7 +334,7 @@
           >
             <fieldset>
               <legend id="step-6-heading" class="text-2xl font-bold mb-2">RPO (Recovery Point Objective)</legend>
-              <p class="text-gray-600 dark:text-gray-400 mb-6">Quelle quantité de données pouvez-vous vous permettre de perdre ?</p>
+              <p class="text-gray-600 dark:text-gray-400 mb-6">How much data loss can you tolerate?</p>
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <template x-for="opt in rpoOptions" :key="opt.value">
                   <label
@@ -369,7 +369,7 @@
             @click="prevStep()"
             class="px-6 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
           >
-            Précédent
+            Previous
           </button>
           <div x-show="currentStep <= 1"></div>
 
@@ -383,7 +383,7 @@
               ? 'bg-blue-600 hover:bg-blue-700 text-white'
               : 'bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed'"
           >
-            Suivant
+            Next
           </button>
 
           <button
@@ -396,7 +396,7 @@
               ? 'bg-green-600 hover:bg-green-700 text-white'
               : 'bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed'"
           >
-            Calculer
+            Calculate
           </button>
         </div>
 
@@ -416,11 +416,11 @@
           class="rounded-2xl p-8 text-white mb-8"
           :class="result ? tierGradient(result.tier) : ''"
         >
-          <p class="text-sm font-medium uppercase tracking-wider opacity-80">Recommandation SLA</p>
+          <p class="text-sm font-medium uppercase tracking-wider opacity-80">SLA recommendation</p>
           <h2 class="text-4xl font-bold mt-2" x-text="result ? result.tier : ''"></h2>
           <p class="text-5xl font-bold font-mono mt-2" x-text="result ? result.slaPercent + '%' : ''"></p>
           <p class="mt-3 opacity-80 text-sm">
-            Score : <span class="font-mono font-semibold" x-text="result ? result.score + '/24' : ''"></span>
+            Score: <span class="font-mono font-semibold" x-text="result ? result.score + '/24' : ''"></span>
           </p>
         </div>
 
@@ -429,18 +429,18 @@
 
           <!-- Downtime card -->
           <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-            <h3 class="text-lg font-semibold mb-4">Indisponibilité tolérée</h3>
+            <h3 class="text-lg font-semibold mb-4">Allowed downtime</h3>
             <dl class="space-y-3">
               <div class="flex justify-between">
-                <dt class="text-gray-500 dark:text-gray-400">Annuelle</dt>
+                <dt class="text-gray-500 dark:text-gray-400">Yearly</dt>
                 <dd class="font-mono font-semibold" x-text="result ? result.downtimeYear : ''"></dd>
               </div>
               <div class="flex justify-between">
-                <dt class="text-gray-500 dark:text-gray-400">Mensuelle</dt>
+                <dt class="text-gray-500 dark:text-gray-400">Monthly</dt>
                 <dd class="font-mono font-semibold" x-text="result ? result.downtimeMonth : ''"></dd>
               </div>
               <div class="flex justify-between">
-                <dt class="text-gray-500 dark:text-gray-400">Hebdomadaire</dt>
+                <dt class="text-gray-500 dark:text-gray-400">Weekly</dt>
                 <dd class="font-mono font-semibold" x-text="result ? result.downtimeWeek : ''"></dd>
               </div>
             </dl>
@@ -448,19 +448,19 @@
 
           <!-- Cost card -->
           <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-            <h3 class="text-lg font-semibold mb-4">Coût relatif</h3>
+            <h3 class="text-lg font-semibold mb-4">Relative cost</h3>
             <dl class="space-y-3">
               <div class="flex justify-between">
-                <dt class="text-gray-500 dark:text-gray-400">Multiplicateur</dt>
+                <dt class="text-gray-500 dark:text-gray-400">Multiplier</dt>
                 <dd class="font-mono font-semibold text-lg" x-text="result ? result.costMultiplier : ''"></dd>
               </div>
             </dl>
-            <p class="text-sm text-gray-500 dark:text-gray-400 mt-4">Par rapport à une infrastructure de base sans redondance.</p>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mt-4">Compared to a baseline, non-redundant infrastructure.</p>
           </div>
 
           <!-- Architecture card -->
           <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-            <h3 class="text-lg font-semibold mb-4">Architecture requise</h3>
+            <h3 class="text-lg font-semibold mb-4">Required architecture</h3>
             <ul class="space-y-2">
               <template x-for="item in (result ? result.architecture : [])" :key="item">
                 <li class="flex items-start gap-2">
@@ -475,7 +475,7 @@
 
           <!-- Penalties card -->
           <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-            <h3 class="text-lg font-semibold mb-4">Pénalités (crédits de service)</h3>
+            <h3 class="text-lg font-semibold mb-4">Penalties (service credits)</h3>
             <ul class="space-y-2">
               <template x-for="p in (result ? result.penalties : [])" :key="p">
                 <li class="flex items-start gap-2">
@@ -517,7 +517,7 @@
                       'text-amber-800 dark:text-amber-200': w.severity === 'warning',
                       'text-blue-800 dark:text-blue-200': w.severity === 'info'
                     }"
-                    x-text="w.severity === 'error' ? 'Erreur' : w.severity === 'warning' ? 'Attention' : 'Information'"
+                    x-text="w.severity === 'error' ? 'Error' : w.severity === 'warning' ? 'Warning' : 'Info'"
                   ></p>
                   <p class="text-sm mt-1"
                     :class="{
@@ -539,25 +539,25 @@
             @click="reset()"
             class="px-6 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
           >
-            Recommencer
+            Start over
           </button>
           <button
             @click="shareUrl()"
             class="px-6 py-3 rounded-lg bg-blue-500 hover:bg-blue-600 text-white font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
-            x-text="shared ? 'Lien copié !' : 'Partager'"
+            x-text="shared ? 'Link copied!' : 'Share'"
           >
           </button>
           <button
             @click="exportMarkdown()"
             class="px-6 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
-            x-text="exported ? 'Markdown copié !' : 'Copier Markdown'"
+            x-text="exported ? 'Markdown copied!' : 'Copy Markdown'"
           >
           </button>
           <button
             @click="exportPDF()"
             :disabled="exporting"
             class="px-6 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 disabled:opacity-50"
-            x-text="exporting ? 'Génération...' : 'Exporter PDF'"
+            x-text="exporting ? 'Generating...' : 'Export PDF'"
           >
           </button>
         </div>
@@ -568,17 +568,17 @@
 
       <!-- Comparison table -->
       <div class="mb-8 mt-12">
-        <h3 class="text-lg font-semibold mb-4">Comparaison des tiers</h3>
+        <h3 class="text-lg font-semibold mb-4">Tier comparison</h3>
         <div class="overflow-x-auto">
           <table class="w-full text-sm border-collapse">
             <thead>
               <tr class="border-b border-gray-200 dark:border-gray-700">
                 <th class="text-left py-3 px-3 font-semibold text-gray-500 dark:text-gray-400">Tier</th>
                 <th class="text-right py-3 px-3 font-semibold text-gray-500 dark:text-gray-400">SLA</th>
-                <th class="text-right py-3 px-3 font-semibold text-gray-500 dark:text-gray-400 hidden sm:table-cell">Indispo. / an</th>
-                <th class="text-right py-3 px-3 font-semibold text-gray-500 dark:text-gray-400 hidden sm:table-cell">Indispo. / mois</th>
-                <th class="text-right py-3 px-3 font-semibold text-gray-500 dark:text-gray-400">Coût</th>
-                <th class="text-left py-3 px-3 font-semibold text-gray-500 dark:text-gray-400 hidden md:table-cell">Cas d'usage</th>
+                <th class="text-right py-3 px-3 font-semibold text-gray-500 dark:text-gray-400 hidden sm:table-cell">Downtime / year</th>
+                <th class="text-right py-3 px-3 font-semibold text-gray-500 dark:text-gray-400 hidden sm:table-cell">Downtime / month</th>
+                <th class="text-right py-3 px-3 font-semibold text-gray-500 dark:text-gray-400">Cost</th>
+                <th class="text-left py-3 px-3 font-semibold text-gray-500 dark:text-gray-400 hidden md:table-cell">Use cases</th>
               </tr>
             </thead>
             <tbody>
@@ -590,7 +590,7 @@
                   <td class="py-3 px-3">
                     <span class="inline-flex items-center gap-1.5">
                       <span class="font-semibold" x-text="t.name"></span>
-                      <span x-show="result && result.tier === t.name" class="text-xs bg-blue-500 text-white px-1.5 py-0.5 rounded-full">recommandé</span>
+                      <span x-show="result && result.tier === t.name" class="text-xs bg-blue-500 text-white px-1.5 py-0.5 rounded-full">recommended</span>
                     </span>
                   </td>
                   <td class="text-right py-3 px-3 font-mono" x-text="t.slaPercent + '%'"></td>
@@ -607,7 +607,7 @@
 
       <!-- Cloud Provider SLAs -->
       <div class="mb-8">
-        <h3 class="text-lg font-semibold mb-4">SLA des cloud providers</h3>
+        <h3 class="text-lg font-semibold mb-4">Cloud provider SLAs</h3>
         <div class="overflow-x-auto">
           <table class="w-full text-sm border-collapse">
             <thead>
@@ -642,21 +642,21 @@
 
         <!-- Legend -->
         <p x-show="result" class="mt-3 text-xs text-gray-400 dark:text-gray-500">
-          <span class="text-green-600 dark:text-green-400 font-semibold">&#9679;</span> Compatible avec votre tier
+          <span class="text-green-600 dark:text-green-400 font-semibold">&#9679;</span> Compatible with your target tier
           &nbsp;&middot;&nbsp;
-          <span class="text-amber-500 font-semibold">&#9679;</span> SLA inférieur à votre objectif (point de vigilance)
+          <span class="text-amber-500 font-semibold">&#9679;</span> Lower SLA than your target (needs attention)
         </p>
 
         <!-- Composite SLA formula -->
         <div class="mt-6 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
-          <p class="font-semibold text-sm mb-1">Formule SLA composite</p>
+          <p class="font-semibold text-sm mb-1">Composite SLA formula</p>
           <p class="font-mono text-sm">SLA<sub>composite</sub> = SLA<sub>1</sub> &times; SLA<sub>2</sub> &times; &hellip; &times; SLA<sub>n</sub></p>
-          <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">Exemple : Compute (99.99%) &times; Database (99.95%) &times; Load Balancer (99.99%) = <span class="font-mono font-semibold text-gray-700 dark:text-gray-200">99.93%</span></p>
+          <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">Example: Compute (99.99%) &times; Database (99.95%) &times; Load Balancer (99.99%) = <span class="font-mono font-semibold text-gray-700 dark:text-gray-200">99.93%</span></p>
         </div>
 
         <!-- Sources -->
         <p class="mt-4 text-xs text-gray-400 dark:text-gray-500">
-          Sources :
+          Sources:
           <a href="https://aws.amazon.com/legal/service-level-agreements/" target="_blank" rel="noopener" class="underline hover:text-gray-600 dark:hover:text-gray-300">AWS SLA</a>,
           <a href="https://cloud.google.com/terms/sla" target="_blank" rel="noopener" class="underline hover:text-gray-600 dark:hover:text-gray-300">Google Cloud SLA</a>,
           <a href="https://www.microsoft.com/licensing/docs/view/Service-Level-Agreements-SLA-for-Online-Services" target="_blank" rel="noopener" class="underline hover:text-gray-600 dark:hover:text-gray-300">Azure SLA</a>
@@ -669,7 +669,7 @@
     <footer class="max-w-4xl mx-auto px-4 py-8 mt-8 border-t border-gray-200 dark:border-gray-700">
       <p class="text-center text-sm text-gray-500 dark:text-gray-400">
         SLAdvisor.dev &mdash; Built by <a href="https://github.com/clementgineste" class="text-gray-900 dark:text-white underline hover:text-blue-500 dark:hover:text-blue-400 transition-colors">Clément Gineste</a>
-        &mdash; <a href="https://github.com/clementgineste/sladvisor/blob/main/SOURCES.md" class="underline hover:text-gray-700 dark:hover:text-gray-300">Sources & références</a>
+        &mdash; <a href="https://github.com/clementgineste/sladvisor/blob/main/SOURCES.md" class="underline hover:text-gray-700 dark:hover:text-gray-300">Sources & references</a>
       </p>
     </footer>
 
@@ -687,102 +687,102 @@
         slaPercent: 99.0,
         costMultiplier: '1x',
         architecture: [
-          'Instance unique (pas de redondance)',
-          'Monitoring basique (ping de disponibilité)',
-          'Procédures de reprise manuelles',
-          'Zone de disponibilité unique',
-          'Sauvegardes périodiques (quotidiennes)',
-          'Infrastructure mutualisée acceptable',
+          'Single instance (no redundancy)',
+          'Basic monitoring (availability ping)',
+          'Manual recovery procedures',
+          'Single availability zone',
+          'Periodic backups (daily)',
+          'Shared infrastructure is acceptable',
         ],
         penalties: [
-          '< 99.0% : 10% de crédit',
-          '< 95.0% : 25% de crédit',
-          '< 90.0% : 50% de crédit',
+          '< 99.0%: 10% credit',
+          '< 95.0%: 25% credit',
+          '< 90.0%: 50% credit',
         ],
-        useCases: ['Outils internes', 'Environnements de développement', 'Prototypes'],
+        useCases: ['Internal tools', 'Development environments', 'Prototypes'],
       },
       Silver: {
         slaPercent: 99.9,
         costMultiplier: '1.5-3x',
         architecture: [
-          'Répartiteur de charge avec health checks',
-          'Redémarrage automatique en cas de panne',
-          'Redondance mono-zone (2+ instances)',
-          'Sauvegardes automatisées (horaires)',
-          'Alerting basique (email / Slack)',
-          'Runbooks de réponse aux incidents',
+          'Load balancer with health checks',
+          'Automatic restart in case of failure',
+          'Single-zone redundancy (2+ instances)',
+          'Automated backups (hourly)',
+          'Basic alerting (email / Slack)',
+          'Incident response runbooks',
         ],
         penalties: [
-          '< 99.9% : 10% de crédit',
-          '< 99.0% : 25% de crédit',
-          '< 95.0% : 50% de crédit',
+          '< 99.9%: 10% credit',
+          '< 99.0%: 25% credit',
+          '< 95.0%: 50% credit',
         ],
-        useCases: ['Applications métier standard', 'SaaS B2B', 'Sites web professionnels'],
+        useCases: ['Standard business apps', 'B2B SaaS', 'Professional websites'],
       },
       Gold: {
         slaPercent: 99.95,
         costMultiplier: '3-5x',
         architecture: [
-          'Déploiement multi-zone (2+ zones de disponibilité)',
+          'Multi-zone deployment (2+ availability zones)',
           'Auto-scaling groups',
-          'Failover automatique (base de données, compute)',
-          'Déploiements blue-green ou canary',
-          'CDN pour les assets statiques',
-          'Monitoring centralisé (Datadog, Grafana)',
-          'Astreinte avec réponse < 30 min',
-          'Sauvegardes avec restauration à un point dans le temps',
+          'Automatic failover (database, compute)',
+          'Blue-green or canary deployments',
+          'CDN for static assets',
+          'Centralized monitoring (Datadog, Grafana)',
+          'On-call with < 30 min response',
+          'Backups with point-in-time restore',
         ],
         penalties: [
-          '< 99.95% : 10% de crédit',
-          '< 99.0% : 25% de crédit',
-          '< 95.0% : 100% de crédit',
+          '< 99.95%: 10% credit',
+          '< 99.0%: 25% credit',
+          '< 95.0%: 100% credit',
         ],
-        useCases: ['Applications client critiques', 'E-commerce', 'Plateformes SaaS'],
+        useCases: ['Critical customer apps', 'E-commerce', 'SaaS platforms'],
       },
       Platinum: {
         slaPercent: 99.99,
         costMultiplier: '5-15x',
         architecture: [
-          'Déploiement multi-zone actif-actif',
-          'Pipeline de déploiement zero-downtime',
-          'Réplication BDD avec failover automatique (< 30s)',
-          'Observabilité complète (métriques, logs, traces, synthétiques)',
-          'Auto-scaling avec politiques prédictives',
-          'Équipe de réponse aux incidents dédiée (24/7)',
-          'Chaos engineering (injection de pannes périodique)',
-          'Infrastructure immutable (IaC)',
-          'Service mesh pour la gestion du trafic',
-          'Rollback automatique sur pic de taux d\'erreur',
+          'Active-active multi-zone deployment',
+          'Zero-downtime deployment pipeline',
+          'Database replication with automatic failover (< 30s)',
+          'Full observability (metrics, logs, traces, synthetic checks)',
+          'Auto-scaling with predictive policies',
+          'Dedicated incident response team (24/7)',
+          'Chaos engineering (periodic fault injection)',
+          'Immutable infrastructure (IaC)',
+          'Service mesh for traffic management',
+          'Automatic rollback on error-rate spikes',
         ],
         penalties: [
-          '< 99.99% : 10% de crédit',
-          '< 99.9% : 25% de crédit',
-          '< 99.0% : 100% de crédit',
+          '< 99.99%: 10% credit',
+          '< 99.9%: 25% credit',
+          '< 99.0%: 100% credit',
         ],
-        useCases: ['Services financiers', 'Santé', 'Infrastructure critique'],
+        useCases: ['Financial services', 'Healthcare', 'Critical infrastructure'],
       },
       Diamond: {
         slaPercent: 99.999,
         costMultiplier: '10-50x',
         architecture: [
-          'Déploiement multi-région actif-actif (3+ régions)',
-          'Répartition de charge globale avec failover < 1s',
-          'Réplication synchrone des données inter-régions',
-          'Programme de chaos engineering (continu)',
-          'RTO < 5 min, RPO ~ 0 (zéro perte de données)',
-          'Détection et remédiation automatique des incidents',
-          'Redondance N+2 à chaque couche',
-          'Équipe SRE dédiée (multiples ingénieurs 24/7)',
-          'Circuit breakers, bulkheads et budgets de retry',
-          'Déploiement continu avec analyse canary automatisée',
-          'Exercices de reprise après sinistre trimestriels',
+          'Active-active multi-region deployment (3+ regions)',
+          'Global load balancing with < 1s failover',
+          'Cross-region synchronous data replication',
+          'Continuous chaos engineering program',
+          'RTO < 5 min, RPO ~ 0 (zero data loss)',
+          'Automatic incident detection and remediation',
+          'N+2 redundancy at every layer',
+          'Dedicated SRE team (multiple engineers 24/7)',
+          'Circuit breakers, bulkheads and retry budgets',
+          'Continuous deployment with automated canary analysis',
+          'Quarterly disaster recovery exercises',
         ],
         penalties: [
-          '< 99.999% : 10% de crédit',
-          '< 99.99% : 25% de crédit',
-          '< 99.9% : 100% de crédit',
+          '< 99.999%: 10% credit',
+          '< 99.99%: 25% credit',
+          '< 99.9%: 100% credit',
         ],
-        useCases: ['Sécurité des personnes', 'Transactions financières temps réel', 'Infrastructure critique nationale'],
+        useCases: ['Life safety', 'Real-time financial transactions', 'National critical infrastructure'],
       },
     };
 
@@ -819,7 +819,7 @@
         azure: { name: 'Virtual Machines', sla: 99.99 },
       },
       {
-        category: 'Base de données',
+        category: 'Database',
         aws:   { name: 'RDS Multi-AZ',  sla: 99.95 },
         gcp:   { name: 'Cloud SQL',     sla: 99.95 },
         azure: { name: 'SQL Database',  sla: 99.99 },
@@ -831,7 +831,7 @@
         azure: { name: 'Load Balancer',         sla: 99.99 },
       },
       {
-        category: 'Stockage objet',
+        category: 'Object storage',
         aws:   { name: 'S3',             sla: 99.9  },
         gcp:   { name: 'Cloud Storage',  sla: 99.95 },
         azure: { name: 'Blob Storage',   sla: 99.9  },
@@ -866,7 +866,7 @@
       const secs = Math.round(seconds % 60);
 
       const parts = [];
-      if (days > 0) parts.push(days + 'j');
+      if (days > 0) parts.push(days + 'd');
       if (hours > 0) parts.push(hours + 'h');
       if (minutes > 0) parts.push(minutes + 'min');
       if (secs > 0) parts.push(secs + 's');
@@ -940,7 +940,7 @@
         warnings.push({
           key: 'budget_cap',
           severity: 'warning',
-          message: `Vos besoins techniques indiquent le tier ${uncappedTier}, mais votre budget limite la recommandation à ${tier}.`,
+          message: `Your technical needs indicate the ${uncappedTier} tier, but your budget caps the recommendation at ${tier}.`,
         });
       }
 
@@ -949,7 +949,7 @@
         warnings.push({
           key: 'critical_low_budget',
           severity: 'error',
-          message: 'Criticité élevée avec un budget faible : c\'est un risque majeur. Envisagez d\'augmenter le budget ou de réduire les attentes de disponibilité.',
+          message: 'High criticality with a low budget is a major risk. Consider increasing budget or lowering availability expectations.',
         });
       }
 
@@ -958,7 +958,7 @@
         warnings.push({
           key: 'critical_slow_rto',
           severity: 'warning',
-          message: 'Un RTO de 4h est trop élevé pour un service critique. Visez un RTO de 15 minutes ou moins.',
+          message: 'An RTO of 4h is too high for a critical service. Target an RTO of 15 minutes or less.',
         });
       }
 
@@ -967,7 +967,7 @@
         warnings.push({
           key: 'critical_high_rpo',
           severity: 'warning',
-          message: 'Un RPO de 24h signifie accepter la perte d\'une journée de données pour un service critique.',
+          message: 'An RPO of 24h means accepting one day of data loss for a critical service.',
         });
       }
 
@@ -976,7 +976,7 @@
         warnings.push({
           key: 'tolerance_rto_mismatch',
           severity: 'warning',
-          message: `Vous tolérez seulement des secondes d'indisponibilité mais votre RTO est de ${inputs.rto}. Ces objectifs sont incohérents.`,
+          message: `You only tolerate seconds of downtime but your RTO is ${inputs.rto}. These targets are inconsistent.`,
         });
       }
 
@@ -985,7 +985,7 @@
         warnings.push({
           key: 'support_budget_mismatch',
           severity: 'warning',
-          message: 'Le support 24/7 nécessite une équipe d\'astreinte, difficilement compatible avec un budget faible.',
+          message: '24/7 support requires an on-call team and is hard to sustain on a low budget.',
         });
       }
 
@@ -994,7 +994,7 @@
         warnings.push({
           key: 'overengineered',
           severity: 'info',
-          message: 'Les exigences sont élevées pour un service de faible criticité. Assurez-vous que ce niveau d\'investissement est justifié.',
+          message: 'These requirements are high for a low-criticality service. Ensure this investment level is justified.',
         });
       }
 
@@ -1003,7 +1003,7 @@
         warnings.push({
           key: 'realtime_rpo_low_budget',
           severity: 'error',
-          message: 'Un RPO temps réel nécessite une réplication synchrone multi-région, incompatible avec un budget faible.',
+          message: 'A real-time RPO requires synchronous multi-region replication, which is incompatible with a low budget.',
         });
       }
 
@@ -1012,7 +1012,7 @@
         warnings.push({
           key: 'diamond_complexity',
           severity: 'info',
-          message: 'Le tier Diamond (99.999%) est extrêmement coûteux et complexe à opérer. Vérifiez qu\'il est réellement nécessaire.',
+          message: 'Diamond tier (99.999%) is extremely expensive and complex to operate. Confirm it is truly necessary.',
         });
       }
 
@@ -1022,7 +1022,7 @@
         warnings.push({
           key: 'support_tier_mismatch',
           severity: 'warning',
-          message: 'Un support en heures ouvrables est insuffisant pour ce niveau de SLA. Les nuits et week-ends consommeront votre budget d\'indisponibilité.',
+          message: 'Business-hours support is insufficient for this SLA level. Nights and weekends will consume your downtime budget.',
         });
       }
 
@@ -1097,52 +1097,52 @@
         // Step options (data-driven)
         get criticalityOptions() {
           return [
-            { value: 'low', label: 'Faible', desc: 'Outils internes, environnements de dev' },
-            { value: 'medium', label: 'Moyen', desc: 'Applications métier non critiques' },
-            { value: 'high', label: 'Élevé', desc: 'Applications client, e-commerce' },
-            { value: 'critical', label: 'Critique', desc: 'Services financiers, santé, sécurité' },
+            { value: 'low', label: 'Low', desc: 'Internal tools, dev environments' },
+            { value: 'medium', label: 'Medium', desc: 'Non-critical business applications' },
+            { value: 'high', label: 'High', desc: 'Customer-facing apps, e-commerce' },
+            { value: 'critical', label: 'Critical', desc: 'Financial, healthcare, safety services' },
           ];
         },
 
         get downtimeToleranceOptions() {
           return [
-            { value: 'hours', label: 'Heures', desc: 'Quelques heures d\'indisponibilité sont acceptables' },
-            { value: 'minutes', label: 'Minutes', desc: 'L\'indisponibilité doit rester sous quelques minutes' },
-            { value: 'seconds', label: 'Secondes', desc: 'Chaque seconde d\'indisponibilité a un impact' },
+            { value: 'hours', label: 'Hours', desc: 'A few hours of downtime are acceptable' },
+            { value: 'minutes', label: 'Minutes', desc: 'Downtime should stay under a few minutes' },
+            { value: 'seconds', label: 'Seconds', desc: 'Every second of downtime has impact' },
           ];
         },
 
         get supportWindowOptions() {
           return [
-            { value: 'business', label: 'Heures ouvrables', desc: 'Lun-Ven, 9h-18h' },
-            { value: 'extended', label: 'Étendu', desc: 'Lun-Sam, 7h-22h' },
-            { value: '24x7', label: '24/7', desc: 'Support continu, nuits et week-ends inclus' },
+            { value: 'business', label: 'Business hours', desc: 'Mon-Fri, 9am-6pm' },
+            { value: 'extended', label: 'Extended', desc: 'Mon-Sat, 7am-10pm' },
+            { value: '24x7', label: '24/7', desc: 'Continuous support, including nights and weekends' },
           ];
         },
 
         get budgetOptions() {
           return [
-            { value: 'low', label: 'Faible', desc: 'Budget limité, infrastructure minimale' },
-            { value: 'medium', label: 'Moyen', desc: 'Budget raisonnable pour la redondance' },
-            { value: 'high', label: 'Élevé', desc: 'Budget conséquent pour haute disponibilité' },
+            { value: 'low', label: 'Low', desc: 'Limited budget, minimal infrastructure' },
+            { value: 'medium', label: 'Medium', desc: 'Reasonable budget for redundancy' },
+            { value: 'high', label: 'High', desc: 'Substantial budget for high availability' },
           ];
         },
 
         get rtoOptions() {
           return [
-            { value: '4h', label: '4 heures', desc: 'Reprise en demi-journée acceptable' },
-            { value: '1h', label: '1 heure', desc: 'Reprise rapide nécessaire' },
-            { value: '15min', label: '15 minutes', desc: 'Failover automatique requis' },
-            { value: '5min', label: '5 minutes', desc: 'Reprise quasi-instantanée' },
+            { value: '4h', label: '4 hours', desc: 'Half-day recovery is acceptable' },
+            { value: '1h', label: '1 hour', desc: 'Fast recovery is required' },
+            { value: '15min', label: '15 minutes', desc: 'Automatic failover is required' },
+            { value: '5min', label: '5 minutes', desc: 'Near-instant recovery' },
           ];
         },
 
         get rpoOptions() {
           return [
-            { value: '24h', label: '24 heures', desc: 'Perte d\'une journée de données acceptable' },
-            { value: '1h', label: '1 heure', desc: 'Sauvegardes fréquentes nécessaires' },
-            { value: '15min', label: '15 minutes', desc: 'Réplication asynchrone requise' },
-            { value: 'realtime', label: 'Temps réel', desc: 'Zéro perte de données (réplication synchrone)' },
+            { value: '24h', label: '24 hours', desc: 'One day of data loss is acceptable' },
+            { value: '1h', label: '1 hour', desc: 'Frequent backups are required' },
+            { value: '15min', label: '15 minutes', desc: 'Asynchronous replication is required' },
+            { value: 'realtime', label: 'Real-time', desc: 'Zero data loss (synchronous replication)' },
           ];
         },
 
@@ -1258,7 +1258,7 @@
           doc.textWithLink('SLAdvisor.dev', M, 18, { url: 'https://sladvisor.dev' });
           doc.setFontSize(14);
           doc.setFont('helvetica', 'normal');
-          doc.text('Recommandation SLA', M, 27);
+          doc.text('SLA recommendation', M, 27);
           doc.setFontSize(36);
           doc.setFont('helvetica', 'bold');
           doc.text(r.tier + '  —  ' + r.slaPercent + '%', M, 40);
@@ -1308,13 +1308,13 @@
           doc.setFontSize(9);
           doc.setFont('helvetica', 'normal');
           doc.setTextColor(100, 100, 100);
-          doc.text('Score : ' + r.score + '/24  |  ' + new Date().toLocaleDateString('fr-FR'), M, y);
+          doc.text('Score: ' + r.score + '/24  |  ' + new Date().toLocaleDateString('en-US'), M, y);
           y += 6;
           doc.setFontSize(8);
           doc.setTextColor(130, 130, 130);
-          doc.text('Un SLA (Service Level Agreement) définit le niveau de disponibilité garanti entre un fournisseur et son client.', M, y);
+          doc.text('An SLA (Service Level Agreement) defines the guaranteed availability level between provider and customer.', M, y);
           y += 4;
-          doc.text('Ce document résume les implications techniques, financières et opérationnelles du tier recommandé selon vos critères.', M, y);
+          doc.text('This document summarizes the technical, financial, and operational implications of the recommended tier.', M, y);
           y += 8;
           // Tier scale bar
           const tiers = ['Bronze', 'Silver', 'Gold', 'Platinum', 'Diamond'];
@@ -1350,13 +1350,13 @@
           };
 
           // User inputs
-          section('Paramètres renseignés');
+          section('Selected inputs');
           doc.setFontSize(9);
           doc.setFont('helvetica', 'normal');
           doc.setTextColor(60, 60, 60);
           const inputs = [
-            ['Criticité', inputLabels.criticality[this.criticality]],
-            ['Tolérance indispo.', inputLabels.downtimeTolerance[this.downtimeTolerance]],
+            ['Criticality', inputLabels.criticality[this.criticality]],
+            ['Downtime tolerance', inputLabels.downtimeTolerance[this.downtimeTolerance]],
             ['Support', inputLabels.supportWindow[this.supportWindow]],
             ['Budget', inputLabels.budgetLevel[this.budgetLevel]],
             ['RTO', inputLabels.rto[this.rto]],
@@ -1383,11 +1383,11 @@
           y += 6;
 
           // Downtime
-          section('Indisponibilité tolérée');
+          section('Allowed downtime');
           doc.setFontSize(10);
           doc.setFont('helvetica', 'normal');
           doc.setTextColor(60, 60, 60);
-          [['Annuelle', r.downtimeYear], ['Mensuelle', r.downtimeMonth], ['Hebdomadaire', r.downtimeWeek]].forEach(([label, val]) => {
+          [['Yearly', r.downtimeYear], ['Monthly', r.downtimeMonth], ['Weekly', r.downtimeWeek]].forEach(([label, val]) => {
             doc.text(label, M + 5, y);
             doc.setFont('helvetica', 'bold');
             doc.text(val, M + CW, y, { align: 'right' });
@@ -1397,16 +1397,16 @@
           y += 6;
 
           // Cost
-          section('Coût relatif');
+          section('Relative cost');
           doc.setFontSize(10);
-          doc.text('Multiplicateur vs infrastructure de base :', M + 5, y);
+          doc.text('Multiplier vs baseline infrastructure:', M + 5, y);
           doc.setFont('helvetica', 'bold');
           doc.text(r.costMultiplier, M + CW, y, { align: 'right' });
           doc.setFont('helvetica', 'normal');
           y += 10;
 
           // Architecture
-          section('Architecture requise');
+          section('Required architecture');
           doc.setFontSize(9);
           r.architecture.forEach(item => {
             doc.setFillColor(...color);
@@ -1418,7 +1418,7 @@
           y += 5;
 
           // Penalties
-          section('Pénalités (crédits de service)');
+          section('Penalties (service credits)');
           doc.setFontSize(9);
           r.penalties.forEach(p => {
             doc.text('•  ' + p, M + 5, y);
@@ -1428,10 +1428,10 @@
 
           // Warnings
           if (r.warnings.length > 0) {
-            section('Alertes');
+            section('Warnings');
             doc.setFontSize(9);
             r.warnings.forEach(w => {
-              const prefix = w.severity === 'error' ? '[ERREUR]' : w.severity === 'warning' ? '[ATTENTION]' : '[INFO]';
+              const prefix = w.severity === 'error' ? '[ERROR]' : w.severity === 'warning' ? '[WARNING]' : '[INFO]';
               doc.setFont('helvetica', 'bold');
               doc.setTextColor(w.severity === 'error' ? 220 : 180, w.severity === 'error' ? 50 : 120, 0);
               doc.text(prefix, M + 5, y);
@@ -1465,35 +1465,35 @@
           const r = this.result;
           if (!r) return;
           const lines = [
-            '# Recommandation SLA — ' + r.tier + ' (' + r.slaPercent + '%)',
+            '# SLA Recommendation — ' + r.tier + ' (' + r.slaPercent + '%)',
             '',
-            '> Généré par [SLAdvisor.dev](' + window.location.href + ')',
+            '> Generated by [SLAdvisor.dev](' + window.location.href + ')',
             '',
-            '## Indisponibilité tolérée',
+            '## Allowed downtime',
             '',
-            '| Période | Durée |',
+            '| Period | Duration |',
             '|---|---|',
-            '| Annuelle | ' + r.downtimeYear + ' |',
-            '| Mensuelle | ' + r.downtimeMonth + ' |',
-            '| Hebdomadaire | ' + r.downtimeWeek + ' |',
+            '| Yearly | ' + r.downtimeYear + ' |',
+            '| Monthly | ' + r.downtimeMonth + ' |',
+            '| Weekly | ' + r.downtimeWeek + ' |',
             '',
-            '## Coût relatif',
+            '## Relative cost',
             '',
-            'Multiplicateur : **' + r.costMultiplier + '** (vs infrastructure de base)',
+            'Multiplier: **' + r.costMultiplier + '** (vs baseline infrastructure)',
             '',
-            '## Architecture requise',
+            '## Required architecture',
             '',
             ...r.architecture.map(a => '- ' + a),
             '',
-            '## Pénalités',
+            '## Penalties',
             '',
             ...r.penalties.map(p => '- ' + p),
           ];
           if (r.warnings.length > 0) {
-            lines.push('', '## Alertes', '');
-            r.warnings.forEach(w => lines.push('- **' + w.severity + '** : ' + w.message));
+            lines.push('', '## Warnings', '');
+            r.warnings.forEach(w => lines.push('- **' + w.severity + '**: ' + w.message));
           }
-          lines.push('', '---', 'Score : ' + r.score + '/24');
+          lines.push('', '---', 'Score: ' + r.score + '/24');
           navigator.clipboard.writeText(lines.join('\n'));
           this.exported = true;
           setTimeout(() => this.exported = false, 2000);
