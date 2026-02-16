@@ -34,6 +34,9 @@
     })();
   </script>
 
+  <!-- SECTION: jspdf -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
   <!-- SECTION: styles -->
   <style>
     [x-cloak] { display: none !important; }
@@ -550,17 +553,30 @@
         </div>
 
         <!-- Action buttons -->
-        <div class="flex justify-center gap-3">
+        <div class="flex flex-wrap justify-center gap-3" data-no-print>
           <button
             @click="reset()"
-            class="px-8 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
+            class="px-6 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
           >
             Recommencer
           </button>
           <button
             @click="shareUrl()"
-            class="px-8 py-3 rounded-lg bg-blue-500 hover:bg-blue-600 text-white font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
+            class="px-6 py-3 rounded-lg bg-blue-500 hover:bg-blue-600 text-white font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
             x-text="shared ? 'Lien copié !' : 'Partager'"
+          >
+          </button>
+          <button
+            @click="exportMarkdown()"
+            class="px-6 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
+            x-text="exported ? 'Markdown copié !' : 'Copier Markdown'"
+          >
+          </button>
+          <button
+            @click="exportPDF()"
+            :disabled="exporting"
+            class="px-6 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 disabled:opacity-50"
+            x-text="exporting ? 'Génération...' : 'Exporter PDF'"
           >
           </button>
         </div>
@@ -942,6 +958,8 @@
         showResults: false,
         result: null,
         shared: false,
+        exported: false,
+        exporting: false,
 
         // Inputs
         criticality: 'low',
@@ -1078,6 +1096,282 @@
           navigator.clipboard.writeText(window.location.href);
           this.shared = true;
           setTimeout(() => this.shared = false, 2000);
+        },
+
+        async exportPDF() {
+          const r = this.result;
+          if (!r || this.exporting) return;
+          this.exporting = true;
+          await new Promise(resolve => setTimeout(resolve, 50));
+          const { jsPDF } = window.jspdf;
+          const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+          const W = 210, M = 20, CW = W - 2 * M;
+          let y = M;
+
+          const tierColors = {
+            Bronze: [217, 119, 6], Silver: [107, 114, 128], Gold: [234, 179, 8],
+            Platinum: [79, 70, 229], Diamond: [8, 145, 178],
+          };
+          const color = tierColors[r.tier] || [59, 130, 246];
+
+          // Input labels lookup
+          const inputLabels = {
+            criticality: Object.fromEntries(this.criticalityOptions.map(o => [o.value, o.label])),
+            downtimeTolerance: Object.fromEntries(this.downtimeToleranceOptions.map(o => [o.value, o.label])),
+            supportWindow: Object.fromEntries(this.supportWindowOptions.map(o => [o.value, o.label])),
+            budgetLevel: Object.fromEntries(this.budgetOptions.map(o => [o.value, o.label])),
+            rto: Object.fromEntries(this.rtoOptions.map(o => [o.value, o.label])),
+            rpo: Object.fromEntries(this.rpoOptions.map(o => [o.value, o.label])),
+          };
+
+          // Header band
+          doc.setFillColor(...color);
+          doc.rect(0, 0, W, 45, 'F');
+          doc.setTextColor(255, 255, 255);
+          doc.setFontSize(28);
+          doc.setFont('helvetica', 'bold');
+          doc.textWithLink('SLAdvisor.dev', M, 18, { url: 'https://sladvisor.dev' });
+          doc.setFontSize(14);
+          doc.setFont('helvetica', 'normal');
+          doc.text('Recommandation SLA', M, 27);
+          doc.setFontSize(36);
+          doc.setFont('helvetica', 'bold');
+          doc.text(r.tier + '  —  ' + r.slaPercent + '%', M, 40);
+          // Badge pills (top right)
+          const badges = [
+            { label: 'Sources', url: 'https://github.com/clementgineste/sladvisor/blob/main/SOURCES.md', icon: 'doc' },
+            { label: 'GitHub', url: 'https://github.com/clementgineste/sladvisor', icon: 'github' },
+          ];
+          let bx = W - M;
+          doc.setFontSize(8);
+          doc.setFont('helvetica', 'bold');
+          badges.forEach(b => {
+            const tw = doc.getTextWidth(b.label) + 13;
+            const bxStart = bx - tw;
+            const by = 9, bh = 8;
+            // Pill (clickable area)
+            doc.setFillColor(255, 255, 255);
+            doc.setGState(new doc.GState({ opacity: 0.2 }));
+            doc.roundedRect(bxStart, by, tw, bh, 4, 4, 'F');
+            doc.setGState(new doc.GState({ opacity: 1 }));
+            doc.link(bxStart, by, tw, bh, { url: b.url });
+            // Icon
+            doc.setDrawColor(255, 255, 255);
+            doc.setFillColor(255, 255, 255);
+            const ix = bxStart + 5, iy = by + bh / 2;
+            if (b.icon === 'github') {
+              doc.circle(ix, iy, 2.2, 'F');
+              doc.setFillColor(...color);
+              doc.circle(ix, iy - 0.2, 1.3, 'F');
+              doc.setFillColor(255, 255, 255);
+              doc.circle(ix - 0.5, iy - 0.5, 0.4, 'F');
+              doc.circle(ix + 0.5, iy - 0.5, 0.4, 'F');
+            } else {
+              doc.setLineWidth(0.3);
+              doc.rect(ix - 1.5, iy - 2, 3, 4);
+              doc.line(ix - 0.8, iy - 0.5, ix + 0.8, iy - 0.5);
+              doc.line(ix - 0.8, iy + 0.5, ix + 0.8, iy + 0.5);
+            }
+            // Label
+            doc.setTextColor(255, 255, 255);
+            doc.text(b.label, bxStart + 9, by + bh / 2 + 1);
+            bx = bxStart - 3;
+          });
+          y = 55;
+
+          // Context bar
+          doc.setFontSize(9);
+          doc.setFont('helvetica', 'normal');
+          doc.setTextColor(100, 100, 100);
+          doc.text('Score : ' + r.score + '/24  |  ' + new Date().toLocaleDateString('fr-FR'), M, y);
+          y += 6;
+          doc.setFontSize(8);
+          doc.setTextColor(130, 130, 130);
+          doc.text('Un SLA (Service Level Agreement) définit le niveau de disponibilité garanti entre un fournisseur et son client.', M, y);
+          y += 4;
+          doc.text('Ce document résume les implications techniques, financières et opérationnelles du tier recommandé selon vos critères.', M, y);
+          y += 8;
+          // Tier scale bar
+          const tiers = ['Bronze', 'Silver', 'Gold', 'Platinum', 'Diamond'];
+          const segW = CW / tiers.length;
+          const allColors = {
+            Bronze: [217, 119, 6], Silver: [160, 165, 170], Gold: [234, 179, 8],
+            Platinum: [79, 70, 229], Diamond: [8, 145, 178],
+          };
+          tiers.forEach((t, i) => {
+            const sx = M + i * segW;
+            const c = allColors[t];
+            const isActive = t === r.tier;
+            doc.setFillColor(...c);
+            doc.setGState(new doc.GState({ opacity: isActive ? 1 : 0.2 }));
+            doc.roundedRect(sx + 0.5, y, segW - 1, 5, 1, 1, 'F');
+            doc.setGState(new doc.GState({ opacity: 1 }));
+            doc.setFontSize(7);
+            doc.setFont('helvetica', isActive ? 'bold' : 'normal');
+            doc.setTextColor(isActive ? 255 : 120, isActive ? 255 : 120, isActive ? 255 : 120);
+            doc.text(t, sx + segW / 2, y + 3.5, { align: 'center' });
+          });
+          y += 10;
+
+          // Section helper
+          const section = (title) => {
+            doc.setFillColor(...color);
+            doc.rect(M, y, 2, 7, 'F');
+            doc.setTextColor(40, 40, 40);
+            doc.setFontSize(12);
+            doc.setFont('helvetica', 'bold');
+            doc.text(title, M + 5, y + 5.5);
+            y += 12;
+          };
+
+          // User inputs
+          section('Paramètres renseignés');
+          doc.setFontSize(9);
+          doc.setFont('helvetica', 'normal');
+          doc.setTextColor(60, 60, 60);
+          const inputs = [
+            ['Criticité', inputLabels.criticality[this.criticality]],
+            ['Tolérance indispo.', inputLabels.downtimeTolerance[this.downtimeTolerance]],
+            ['Support', inputLabels.supportWindow[this.supportWindow]],
+            ['Budget', inputLabels.budgetLevel[this.budgetLevel]],
+            ['RTO', inputLabels.rto[this.rto]],
+            ['RPO', inputLabels.rpo[this.rpo]],
+          ];
+          const col1 = M + 5, col2 = M + CW / 2 + 5;
+          for (let i = 0; i < inputs.length; i += 2) {
+            doc.setFont('helvetica', 'normal');
+            doc.setTextColor(120, 120, 120);
+            doc.text(inputs[i][0], col1, y);
+            doc.setFont('helvetica', 'bold');
+            doc.setTextColor(40, 40, 40);
+            doc.text(inputs[i][1], col1 + 30, y);
+            if (inputs[i + 1]) {
+              doc.setFont('helvetica', 'normal');
+              doc.setTextColor(120, 120, 120);
+              doc.text(inputs[i + 1][0], col2, y);
+              doc.setFont('helvetica', 'bold');
+              doc.setTextColor(40, 40, 40);
+              doc.text(inputs[i + 1][1], col2 + 30, y);
+            }
+            y += 6;
+          }
+          y += 6;
+
+          // Downtime
+          section('Indisponibilité tolérée');
+          doc.setFontSize(10);
+          doc.setFont('helvetica', 'normal');
+          doc.setTextColor(60, 60, 60);
+          [['Annuelle', r.downtimeYear], ['Mensuelle', r.downtimeMonth], ['Hebdomadaire', r.downtimeWeek]].forEach(([label, val]) => {
+            doc.text(label, M + 5, y);
+            doc.setFont('helvetica', 'bold');
+            doc.text(val, M + CW, y, { align: 'right' });
+            doc.setFont('helvetica', 'normal');
+            y += 6;
+          });
+          y += 6;
+
+          // Cost
+          section('Coût relatif');
+          doc.setFontSize(10);
+          doc.text('Multiplicateur vs infrastructure de base :', M + 5, y);
+          doc.setFont('helvetica', 'bold');
+          doc.text(r.costMultiplier, M + CW, y, { align: 'right' });
+          doc.setFont('helvetica', 'normal');
+          y += 10;
+
+          // Architecture
+          section('Architecture requise');
+          doc.setFontSize(9);
+          r.architecture.forEach(item => {
+            doc.setFillColor(...color);
+            doc.circle(M + 7, y - 1, 1, 'F');
+            doc.setTextColor(60, 60, 60);
+            doc.text(item, M + 11, y);
+            y += 5;
+          });
+          y += 5;
+
+          // Penalties
+          section('Pénalités (crédits de service)');
+          doc.setFontSize(9);
+          r.penalties.forEach(p => {
+            doc.text('•  ' + p, M + 5, y);
+            y += 5;
+          });
+          y += 5;
+
+          // Warnings
+          if (r.warnings.length > 0) {
+            section('Alertes');
+            doc.setFontSize(9);
+            r.warnings.forEach(w => {
+              const prefix = w.severity === 'error' ? '[ERREUR]' : w.severity === 'warning' ? '[ATTENTION]' : '[INFO]';
+              doc.setFont('helvetica', 'bold');
+              doc.setTextColor(w.severity === 'error' ? 220 : 180, w.severity === 'error' ? 50 : 120, 0);
+              doc.text(prefix, M + 5, y);
+              const pw = doc.getTextWidth(prefix);
+              doc.setFont('helvetica', 'normal');
+              doc.setTextColor(60, 60, 60);
+              doc.text(w.message, M + 7 + pw, y, { maxWidth: CW - pw - 12 });
+              y += 7;
+            });
+          }
+
+          // Footer
+          doc.setFontSize(8);
+          doc.setTextColor(150, 150, 150);
+          doc.setFont('helvetica', 'normal');
+          const f1 = 'sladvisor.dev';
+          const sep = ' — ';
+          const f2 = 'Built by Clément Gineste';
+          const totalW = doc.getTextWidth(f1 + sep + f2);
+          const fx = (W - totalW) / 2;
+          doc.textWithLink(f1, fx, 287, { url: 'https://sladvisor.dev' });
+          doc.text(sep, fx + doc.getTextWidth(f1), 287);
+          doc.textWithLink(f2, fx + doc.getTextWidth(f1 + sep), 287, { url: 'https://github.com/clementgineste' });
+
+          doc.save('sladvisor-' + r.tier.toLowerCase() + '.pdf');
+          await new Promise(resolve => setTimeout(resolve, 600));
+          this.exporting = false;
+        },
+
+        exportMarkdown() {
+          const r = this.result;
+          if (!r) return;
+          const lines = [
+            '# Recommandation SLA — ' + r.tier + ' (' + r.slaPercent + '%)',
+            '',
+            '> Généré par [SLAdvisor.dev](' + window.location.href + ')',
+            '',
+            '## Indisponibilité tolérée',
+            '',
+            '| Période | Durée |',
+            '|---|---|',
+            '| Annuelle | ' + r.downtimeYear + ' |',
+            '| Mensuelle | ' + r.downtimeMonth + ' |',
+            '| Hebdomadaire | ' + r.downtimeWeek + ' |',
+            '',
+            '## Coût relatif',
+            '',
+            'Multiplicateur : **' + r.costMultiplier + '** (vs infrastructure de base)',
+            '',
+            '## Architecture requise',
+            '',
+            ...r.architecture.map(a => '- ' + a),
+            '',
+            '## Pénalités',
+            '',
+            ...r.penalties.map(p => '- ' + p),
+          ];
+          if (r.warnings.length > 0) {
+            lines.push('', '## Alertes', '');
+            r.warnings.forEach(w => lines.push('- **' + w.severity + '** : ' + w.message));
+          }
+          lines.push('', '---', 'Score : ' + r.score + '/24');
+          navigator.clipboard.writeText(lines.join('\n'));
+          this.exported = true;
+          setTimeout(() => this.exported = false, 2000);
         },
 
         // Reset
