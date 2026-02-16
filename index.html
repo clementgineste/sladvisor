@@ -510,13 +510,19 @@
           </div>
         </template>
 
-        <!-- Restart button -->
-        <div class="text-center">
+        <!-- Action buttons -->
+        <div class="flex justify-center gap-3">
           <button
             @click="reset()"
             class="px-8 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
           >
             Recommencer
+          </button>
+          <button
+            @click="shareUrl()"
+            class="px-8 py-3 rounded-lg bg-blue-500 hover:bg-blue-600 text-white font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
+            x-text="shared ? 'Lien copié !' : 'Partager'"
+          >
           </button>
         </div>
 
@@ -859,11 +865,21 @@
             this.darkMode = e.matches;
             document.documentElement.classList.toggle('dark', e.matches);
           });
+          // Load config from URL params
+          const params = new URLSearchParams(window.location.search);
+          const keys = ['criticality', 'downtimeTolerance', 'supportWindow', 'budgetLevel', 'rto', 'rpo'];
+          const hasParams = keys.some(k => params.has(k));
+          if (hasParams) {
+            keys.forEach(k => { if (params.get(k)) this[k] = params.get(k); });
+            this.$nextTick(() => this.calculate());
+          }
           // Focus first card on page load
-          setTimeout(() => {
-            const label = document.querySelector('#step-1-heading')?.closest('fieldset')?.querySelector('label[tabindex="0"]');
-            if (label) label.focus();
-          }, 100);
+          if (!hasParams) {
+            setTimeout(() => {
+              const label = document.querySelector('#step-1-heading')?.closest('fieldset')?.querySelector('label[tabindex="0"]');
+              if (label) label.focus();
+            }, 100);
+          }
           this.$watch('currentStep', (step) => {
             if (this.showResults) return;
             setTimeout(() => {
@@ -886,6 +902,7 @@
         currentStep: 1,
         showResults: false,
         result: null,
+        shared: false,
 
         // Inputs
         criticality: 'low',
@@ -1014,6 +1031,14 @@
             rpo: this.rpo,
           });
           this.showResults = true;
+          const params = new URLSearchParams({ criticality: this.criticality, downtimeTolerance: this.downtimeTolerance, supportWindow: this.supportWindow, budgetLevel: this.budgetLevel, rto: this.rto, rpo: this.rpo });
+          history.replaceState(null, '', '?' + params.toString());
+        },
+
+        shareUrl() {
+          navigator.clipboard.writeText(window.location.href);
+          this.shared = true;
+          setTimeout(() => this.shared = false, 2000);
         },
 
         // Reset
@@ -1021,6 +1046,8 @@
           this.currentStep = 1;
           this.showResults = false;
           this.result = null;
+          this.shared = false;
+          history.replaceState(null, '', window.location.pathname);
           this.criticality = 'low';
           this.downtimeTolerance = 'hours';
           this.supportWindow = 'business';
