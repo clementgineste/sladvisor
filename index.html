@@ -104,7 +104,7 @@
         </nav>
 
         <!-- SECTION: steps -->
-        <div class="relative overflow-hidden p-2 -m-2 min-h-[280px]" @keydown="handleCardKeydown">
+        <div class="relative p-2 -m-2 min-h-[280px]" @keydown="handleCardKeydown">
 
           <!-- Step 1: Criticality -->
           <div
@@ -128,7 +128,7 @@
                     tabindex="0"
                     class="relative flex flex-col p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-900 focus:outline-none"
                     :class="criticality === opt.value
-                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 scale-[1.02]'
                       : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-gray-300 dark:hover:border-gray-600'"
                   >
                     <input
@@ -138,6 +138,7 @@
                       x-model="criticality"
                       class="sr-only" tabindex="-1"
                     >
+                    <span x-show="criticality === opt.value" x-transition:enter="transition ease-out duration-150" x-transition:enter-start="opacity-0 scale-75" x-transition:enter-end="opacity-100 scale-100" x-transition:leave="transition ease-in duration-100" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-75" class="absolute top-2.5 right-2.5 w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center"><svg class="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></span>
                     <span class="font-semibold" x-text="opt.label"></span>
                     <span class="text-sm text-gray-500 dark:text-gray-400 mt-1" x-text="opt.desc"></span>
                   </label>
@@ -168,7 +169,7 @@
                     tabindex="0"
                     class="relative flex flex-col p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-900 focus:outline-none"
                     :class="downtimeTolerance === opt.value
-                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 scale-[1.02]'
                       : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-gray-300 dark:hover:border-gray-600'"
                   >
                     <input
@@ -178,6 +179,7 @@
                       x-model="downtimeTolerance"
                       class="sr-only" tabindex="-1"
                     >
+                    <span x-show="downtimeTolerance === opt.value" x-transition:enter="transition ease-out duration-150" x-transition:enter-start="opacity-0 scale-75" x-transition:enter-end="opacity-100 scale-100" x-transition:leave="transition ease-in duration-100" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-75" class="absolute top-2.5 right-2.5 w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center"><svg class="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></span>
                     <span class="font-semibold" x-text="opt.label"></span>
                     <span class="text-sm text-gray-500 dark:text-gray-400 mt-1" x-text="opt.desc"></span>
                   </label>
@@ -208,7 +210,7 @@
                     tabindex="0"
                     class="relative flex flex-col p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-900 focus:outline-none"
                     :class="supportWindow === opt.value
-                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 scale-[1.02]'
                       : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-gray-300 dark:hover:border-gray-600'"
                   >
                     <input
@@ -218,6 +220,7 @@
                       x-model="supportWindow"
                       class="sr-only" tabindex="-1"
                     >
+                    <span x-show="supportWindow === opt.value" x-transition:enter="transition ease-out duration-150" x-transition:enter-start="opacity-0 scale-75" x-transition:enter-end="opacity-100 scale-100" x-transition:leave="transition ease-in duration-100" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-75" class="absolute top-2.5 right-2.5 w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center"><svg class="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></span>
                     <span class="font-semibold" x-text="opt.label"></span>
                     <span class="text-sm text-gray-500 dark:text-gray-400 mt-1" x-text="opt.desc"></span>
                   </label>
@@ -248,7 +251,7 @@
                     tabindex="0"
                     class="relative flex flex-col p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-900 focus:outline-none"
                     :class="budgetLevel === opt.value
-                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 scale-[1.02]'
                       : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-gray-300 dark:hover:border-gray-600'"
                   >
                     <input
@@ -258,6 +261,7 @@
                       x-model="budgetLevel"
                       class="sr-only" tabindex="-1"
                     >
+                    <span x-show="budgetLevel === opt.value" x-transition:enter="transition ease-out duration-150" x-transition:enter-start="opacity-0 scale-75" x-transition:enter-end="opacity-100 scale-100" x-transition:leave="transition ease-in duration-100" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-75" class="absolute top-2.5 right-2.5 w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center"><svg class="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></span>
                     <span class="font-semibold" x-text="opt.label"></span>
                     <span class="text-sm text-gray-500 dark:text-gray-400 mt-1" x-text="opt.desc"></span>
                   </label>
@@ -288,7 +292,7 @@
                     tabindex="0"
                     class="relative flex flex-col p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-900 focus:outline-none"
                     :class="rto === opt.value
-                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 scale-[1.02]'
                       : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-gray-300 dark:hover:border-gray-600'"
                   >
                     <input
@@ -298,6 +302,7 @@
                       x-model="rto"
                       class="sr-only" tabindex="-1"
                     >
+                    <span x-show="rto === opt.value" x-transition:enter="transition ease-out duration-150" x-transition:enter-start="opacity-0 scale-75" x-transition:enter-end="opacity-100 scale-100" x-transition:leave="transition ease-in duration-100" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-75" class="absolute top-2.5 right-2.5 w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center"><svg class="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></span>
                     <span class="font-semibold" x-text="opt.label"></span>
                     <span class="text-sm text-gray-500 dark:text-gray-400 mt-1" x-text="opt.desc"></span>
                   </label>
@@ -328,7 +333,7 @@
                     tabindex="0"
                     class="relative flex flex-col p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-900 focus:outline-none"
                     :class="rpo === opt.value
-                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 scale-[1.02]'
                       : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-gray-300 dark:hover:border-gray-600'"
                   >
                     <input
@@ -338,6 +343,7 @@
                       x-model="rpo"
                       class="sr-only" tabindex="-1"
                     >
+                    <span x-show="rpo === opt.value" x-transition:enter="transition ease-out duration-150" x-transition:enter-start="opacity-0 scale-75" x-transition:enter-end="opacity-100 scale-100" x-transition:leave="transition ease-in duration-100" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-75" class="absolute top-2.5 right-2.5 w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center"><svg class="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></span>
                     <span class="font-semibold" x-text="opt.label"></span>
                     <span class="text-sm text-gray-500 dark:text-gray-400 mt-1" x-text="opt.desc"></span>
                   </label>
