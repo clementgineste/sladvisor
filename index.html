@@ -104,17 +104,18 @@
         </nav>
 
         <!-- SECTION: steps -->
-        <div class="relative overflow-hidden p-2 -m-2" @keydown="handleCardKeydown">
+        <div class="relative overflow-hidden p-2 -m-2 min-h-[280px]" @keydown="handleCardKeydown">
 
           <!-- Step 1: Criticality -->
           <div
             x-show="currentStep === 1"
-            x-transition:enter="transition ease-out duration-300"
-            x-transition:enter-start="opacity-0 translate-x-8"
-            x-transition:enter-end="opacity-100 translate-x-0"
-            x-transition:leave="transition ease-in duration-200"
-            x-transition:leave-start="opacity-100 translate-x-0"
-            x-transition:leave-end="opacity-0 -translate-x-8"
+            class="absolute inset-0"
+            x-transition:enter="transition ease-out duration-200"
+            x-transition:enter-start="opacity-0"
+            x-transition:enter-end="opacity-100"
+            x-transition:leave="transition ease-in duration-100"
+            x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0"
             role="tabpanel"
             aria-labelledby="step-1-heading"
           >
@@ -148,12 +149,13 @@
           <!-- Step 2: Downtime Tolerance -->
           <div
             x-show="currentStep === 2"
-            x-transition:enter="transition ease-out duration-300"
-            x-transition:enter-start="opacity-0 translate-x-8"
-            x-transition:enter-end="opacity-100 translate-x-0"
-            x-transition:leave="transition ease-in duration-200"
-            x-transition:leave-start="opacity-100 translate-x-0"
-            x-transition:leave-end="opacity-0 -translate-x-8"
+            class="absolute inset-0"
+            x-transition:enter="transition ease-out duration-200"
+            x-transition:enter-start="opacity-0"
+            x-transition:enter-end="opacity-100"
+            x-transition:leave="transition ease-in duration-100"
+            x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0"
             role="tabpanel"
             aria-labelledby="step-2-heading"
           >
@@ -187,12 +189,13 @@
           <!-- Step 3: Support Window -->
           <div
             x-show="currentStep === 3"
-            x-transition:enter="transition ease-out duration-300"
-            x-transition:enter-start="opacity-0 translate-x-8"
-            x-transition:enter-end="opacity-100 translate-x-0"
-            x-transition:leave="transition ease-in duration-200"
-            x-transition:leave-start="opacity-100 translate-x-0"
-            x-transition:leave-end="opacity-0 -translate-x-8"
+            class="absolute inset-0"
+            x-transition:enter="transition ease-out duration-200"
+            x-transition:enter-start="opacity-0"
+            x-transition:enter-end="opacity-100"
+            x-transition:leave="transition ease-in duration-100"
+            x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0"
             role="tabpanel"
             aria-labelledby="step-3-heading"
           >
@@ -226,12 +229,13 @@
           <!-- Step 4: Budget -->
           <div
             x-show="currentStep === 4"
-            x-transition:enter="transition ease-out duration-300"
-            x-transition:enter-start="opacity-0 translate-x-8"
-            x-transition:enter-end="opacity-100 translate-x-0"
-            x-transition:leave="transition ease-in duration-200"
-            x-transition:leave-start="opacity-100 translate-x-0"
-            x-transition:leave-end="opacity-0 -translate-x-8"
+            class="absolute inset-0"
+            x-transition:enter="transition ease-out duration-200"
+            x-transition:enter-start="opacity-0"
+            x-transition:enter-end="opacity-100"
+            x-transition:leave="transition ease-in duration-100"
+            x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0"
             role="tabpanel"
             aria-labelledby="step-4-heading"
           >
@@ -265,12 +269,13 @@
           <!-- Step 5: RTO -->
           <div
             x-show="currentStep === 5"
-            x-transition:enter="transition ease-out duration-300"
-            x-transition:enter-start="opacity-0 translate-x-8"
-            x-transition:enter-end="opacity-100 translate-x-0"
-            x-transition:leave="transition ease-in duration-200"
-            x-transition:leave-start="opacity-100 translate-x-0"
-            x-transition:leave-end="opacity-0 -translate-x-8"
+            class="absolute inset-0"
+            x-transition:enter="transition ease-out duration-200"
+            x-transition:enter-start="opacity-0"
+            x-transition:enter-end="opacity-100"
+            x-transition:leave="transition ease-in duration-100"
+            x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0"
             role="tabpanel"
             aria-labelledby="step-5-heading"
           >
@@ -304,12 +309,13 @@
           <!-- Step 6: RPO -->
           <div
             x-show="currentStep === 6"
-            x-transition:enter="transition ease-out duration-300"
-            x-transition:enter-start="opacity-0 translate-x-8"
-            x-transition:enter-end="opacity-100 translate-x-0"
-            x-transition:leave="transition ease-in duration-200"
-            x-transition:leave-start="opacity-100 translate-x-0"
-            x-transition:leave-end="opacity-0 -translate-x-8"
+            class="absolute inset-0"
+            x-transition:enter="transition ease-out duration-200"
+            x-transition:enter-start="opacity-0"
+            x-transition:enter-end="opacity-100"
+            x-transition:leave="transition ease-in duration-100"
+            x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0"
             role="tabpanel"
             aria-labelledby="step-6-heading"
           >
