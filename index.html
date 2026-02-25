@@ -112,12 +112,12 @@
         </nav>
 
         <!-- SECTION: steps -->
-        <div class="relative p-2 -m-2 min-h-[560px] sm:min-h-[280px]" @keydown="handleCardKeydown">
+        <div class="relative p-2 -m-2 sm:min-h-[280px]" @keydown="handleCardKeydown">
 
           <!-- Step 1: Criticality -->
           <div
             x-show="currentStep === 1"
-            class="absolute inset-0"
+            class="sm:absolute sm:inset-0"
             x-transition:enter="transition ease-out duration-200"
             x-transition:enter-start="opacity-0"
             x-transition:enter-end="opacity-100"
@@ -158,7 +158,7 @@
           <!-- Step 2: Downtime Tolerance -->
           <div
             x-show="currentStep === 2"
-            class="absolute inset-0"
+            class="sm:absolute sm:inset-0"
             x-transition:enter="transition ease-out duration-200"
             x-transition:enter-start="opacity-0"
             x-transition:enter-end="opacity-100"
@@ -199,7 +199,7 @@
           <!-- Step 3: Support Window -->
           <div
             x-show="currentStep === 3"
-            class="absolute inset-0"
+            class="sm:absolute sm:inset-0"
             x-transition:enter="transition ease-out duration-200"
             x-transition:enter-start="opacity-0"
             x-transition:enter-end="opacity-100"
@@ -240,7 +240,7 @@
           <!-- Step 4: Budget -->
           <div
             x-show="currentStep === 4"
-            class="absolute inset-0"
+            class="sm:absolute sm:inset-0"
             x-transition:enter="transition ease-out duration-200"
             x-transition:enter-start="opacity-0"
             x-transition:enter-end="opacity-100"
@@ -281,7 +281,7 @@
           <!-- Step 5: RTO -->
           <div
             x-show="currentStep === 5"
-            class="absolute inset-0"
+            class="sm:absolute sm:inset-0"
             x-transition:enter="transition ease-out duration-200"
             x-transition:enter-start="opacity-0"
             x-transition:enter-end="opacity-100"
@@ -322,7 +322,7 @@
           <!-- Step 6: RPO -->
           <div
             x-show="currentStep === 6"
-            class="absolute inset-0"
+            class="sm:absolute sm:inset-0"
             x-transition:enter="transition ease-out duration-200"
             x-transition:enter-start="opacity-0"
             x-transition:enter-end="opacity-100"
