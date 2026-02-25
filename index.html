@@ -836,6 +836,12 @@
       high:   null, // no cap
     };
 
+    // Minimum tier required to architecturally deliver each RTO/RPO target.
+    // E.g. RTO 5min needs active-active failover (Platinum), RPO realtime
+    // needs synchronous multi-region replication (Diamond). See issue #28.
+    const RTO_MIN_TIER = { '5min': 'Platinum', '15min': 'Gold', '1h': 'Silver', '4h': 'Bronze' };
+    const RPO_MIN_TIER = { realtime: 'Diamond', '15min': 'Platinum', '1h': 'Gold', '24h': 'Bronze' };
+
     const CLOUD_SLAS = [
       {
         category: 'Compute',
@@ -1048,6 +1054,26 @@
           key: 'support_tier_mismatch',
           severity: 'warning',
           message: 'Business-hours support is insufficient for this SLA level. Nights and weekends will consume your downtime budget.',
+        });
+      }
+
+      // 11. RTO ↔ tier architectural compatibility
+      const rtoMinTier = RTO_MIN_TIER[inputs.rto];
+      if (tierIndex < TIER_ORDER.indexOf(rtoMinTier)) {
+        warnings.push({
+          key: 'rto_tier_incompatible',
+          severity: 'error',
+          message: `An RTO of ${inputs.rto} requires at minimum a ${rtoMinTier}-tier architecture. ${tier} cannot deliver this recovery speed.`,
+        });
+      }
+
+      // 12. RPO ↔ tier architectural compatibility
+      const rpoMinTier = RPO_MIN_TIER[inputs.rpo];
+      if (tierIndex < TIER_ORDER.indexOf(rpoMinTier)) {
+        warnings.push({
+          key: 'rpo_tier_incompatible',
+          severity: 'error',
+          message: `An RPO of ${inputs.rpo} requires at minimum a ${rpoMinTier}-tier architecture. ${tier} cannot deliver this data protection level.`,
         });
       }
 
