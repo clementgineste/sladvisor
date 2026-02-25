@@ -99,6 +99,7 @@
                     'bg-blue-500 text-white': s === currentStep,
                     'bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400': s > currentStep
                   }"
+                  :aria-current="s === currentStep ? 'step' : false"
                   x-text="s"
                 ></div>
                 <div
@@ -124,13 +125,11 @@
             x-transition:leave="transition ease-in duration-100"
             x-transition:leave-start="opacity-100"
             x-transition:leave-end="opacity-0"
-            role="tabpanel"
-            aria-labelledby="step-1-heading"
           >
             <fieldset>
               <legend id="step-1-heading" class="text-2xl font-bold mb-2">Service criticality</legend>
               <p class="text-gray-600 dark:text-gray-400 mb-6">How critical is this service to your business?</p>
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" role="radiogroup" aria-labelledby="step-1-heading">
                 <template x-for="opt in criticalityOptions" :key="opt.value">
                   <label
                     tabindex="0"
@@ -165,13 +164,11 @@
             x-transition:leave="transition ease-in duration-100"
             x-transition:leave-start="opacity-100"
             x-transition:leave-end="opacity-0"
-            role="tabpanel"
-            aria-labelledby="step-2-heading"
           >
             <fieldset>
               <legend id="step-2-heading" class="text-2xl font-bold mb-2">Downtime tolerance</legend>
               <p class="text-gray-600 dark:text-gray-400 mb-6">How much downtime is acceptable for your users?</p>
-              <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-4" role="radiogroup" aria-labelledby="step-2-heading">
                 <template x-for="opt in downtimeToleranceOptions" :key="opt.value">
                   <label
                     tabindex="0"
@@ -206,13 +203,11 @@
             x-transition:leave="transition ease-in duration-100"
             x-transition:leave-start="opacity-100"
             x-transition:leave-end="opacity-0"
-            role="tabpanel"
-            aria-labelledby="step-3-heading"
           >
             <fieldset>
               <legend id="step-3-heading" class="text-2xl font-bold mb-2">Support window</legend>
               <p class="text-gray-600 dark:text-gray-400 mb-6">What support coverage does this service require?</p>
-              <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-4" role="radiogroup" aria-labelledby="step-3-heading">
                 <template x-for="opt in supportWindowOptions" :key="opt.value">
                   <label
                     tabindex="0"
@@ -247,13 +242,11 @@
             x-transition:leave="transition ease-in duration-100"
             x-transition:leave-start="opacity-100"
             x-transition:leave-end="opacity-0"
-            role="tabpanel"
-            aria-labelledby="step-4-heading"
           >
             <fieldset>
               <legend id="step-4-heading" class="text-2xl font-bold mb-2">Infrastructure budget</legend>
               <p class="text-gray-600 dark:text-gray-400 mb-6">What budget can you allocate to infrastructure and operations?</p>
-              <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-4" role="radiogroup" aria-labelledby="step-4-heading">
                 <template x-for="opt in budgetOptions" :key="opt.value">
                   <label
                     tabindex="0"
@@ -288,13 +281,11 @@
             x-transition:leave="transition ease-in duration-100"
             x-transition:leave-start="opacity-100"
             x-transition:leave-end="opacity-0"
-            role="tabpanel"
-            aria-labelledby="step-5-heading"
           >
             <fieldset>
               <legend id="step-5-heading" class="text-2xl font-bold mb-2">RTO (Recovery Time Objective)</legend>
               <p class="text-gray-600 dark:text-gray-400 mb-6">How quickly must the service recover after an outage?</p>
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" role="radiogroup" aria-labelledby="step-5-heading">
                 <template x-for="opt in rtoOptions" :key="opt.value">
                   <label
                     tabindex="0"
@@ -329,13 +320,11 @@
             x-transition:leave="transition ease-in duration-100"
             x-transition:leave-start="opacity-100"
             x-transition:leave-end="opacity-0"
-            role="tabpanel"
-            aria-labelledby="step-6-heading"
           >
             <fieldset>
               <legend id="step-6-heading" class="text-2xl font-bold mb-2">RPO (Recovery Point Objective)</legend>
               <p class="text-gray-600 dark:text-gray-400 mb-6">How much data loss can you tolerate?</p>
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" role="radiogroup" aria-labelledby="step-6-heading">
                 <template x-for="opt in rpoOptions" :key="opt.value">
                   <label
                     tabindex="0"
@@ -408,8 +397,8 @@
         x-transition:enter="transition ease-out duration-500"
         x-transition:enter-start="opacity-0 translate-y-4"
         x-transition:enter-end="opacity-100 translate-y-0"
-        aria-live="polite"
       >
+        <span class="sr-only" aria-live="polite" x-text="result ? 'Recommendation: ' + result.tier + ' tier, ' + result.slaPercent + '% SLA' : ''"></span>
 
         <!-- Hero card -->
         <div
@@ -507,6 +496,7 @@
                   'bg-amber-50 dark:bg-amber-900/20 border-amber-200 dark:border-amber-800': w.severity === 'warning',
                   'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800': w.severity === 'info'
                 }"
+                :role="w.severity === 'error' ? 'alert' : 'status'"
               >
                 <svg class="w-5 h-5 shrink-0 mt-0.5"
                   :class="{
