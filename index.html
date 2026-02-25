@@ -945,7 +945,7 @@
       const downtimeWeek  = formatDuration(SECONDS_PER_WEEK * slaFraction);
 
       // Detect warnings
-      const warnings = detectWarnings(inputs, tier, uncappedTier, totalScore);
+      const warnings = detectWarnings(inputs, tier, uncappedTier, totalScore, tierData.slaPercent);
 
       return {
         tier,
@@ -963,7 +963,7 @@
       };
     }
 
-    function detectWarnings(inputs, tier, uncappedTier, totalScore) {
+    function detectWarnings(inputs, tier, uncappedTier, totalScore, slaPercent) {
       const warnings = [];
 
       // 1. Budget cap active
@@ -1074,6 +1074,22 @@
           key: 'rpo_tier_incompatible',
           severity: 'error',
           message: `An RPO of ${inputs.rpo} requires at minimum a ${rpoMinTier}-tier architecture. ${tier} cannot deliver this data protection level.`,
+        });
+      }
+
+      // 13. Composite SLA gap — typical 3-tier architecture (compute + DB + LB)
+      // may yield a lower composite SLA than the recommended tier's target.
+      const compositeCategories = ['Compute', 'Database', 'Load Balancer'];
+      const compositeSla = compositeCategories.reduce((acc, cat) => {
+        const service = CLOUD_SLAS.find(s => s.category === cat);
+        const minSla = Math.min(service.aws.sla, service.gcp.sla, service.azure.sla);
+        return acc * (minSla / 100);
+      }, 1) * 100;
+      if (compositeSla < slaPercent) {
+        warnings.push({
+          key: 'composite_sla_gap',
+          severity: 'warning',
+          message: `A typical 3-tier architecture (compute + DB + load balancer) yields a composite SLA of ${compositeSla.toFixed(2)}%, which is below your ${slaPercent}% target. You may need redundancy or higher-SLA services to bridge the gap.`,
         });
       }
 
