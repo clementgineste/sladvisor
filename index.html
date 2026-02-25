@@ -475,7 +475,10 @@
 
           <!-- Penalties card -->
           <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-            <h3 class="text-lg font-semibold mb-4">Penalties (service credits)</h3>
+            <div class="flex items-baseline justify-between mb-4">
+              <h3 class="text-lg font-semibold">Penalties (service credits)</h3>
+              <span class="text-xs text-gray-400 dark:text-gray-500">Measured monthly</span>
+            </div>
             <ul class="space-y-2">
               <template x-for="p in (result ? result.penalties : [])" :key="p">
                 <li class="flex items-start gap-2">
@@ -484,6 +487,11 @@
                 </li>
               </template>
             </ul>
+            <div class="mt-4 pt-3 border-t border-gray-100 dark:border-gray-700 space-y-1.5 text-xs text-gray-400 dark:text-gray-500">
+              <p>Credits are capped at 30% of monthly invoice (industry standard).</p>
+              <p>Exclusions: scheduled maintenance, force majeure, customer-caused incidents.</p>
+              <p>Credits apply to future invoices — not cash refunds.</p>
+            </div>
           </div>
 
         </div>
@@ -1485,13 +1493,19 @@
           y += 5;
 
           // Penalties
-          section('Penalties (service credits)');
+          section('Penalties (service credits — measured monthly)');
           doc.setFontSize(9);
           r.penalties.forEach(p => {
             doc.text('•  ' + p, M + 5, y);
             y += 5;
           });
-          y += 5;
+          doc.setFontSize(7);
+          doc.setTextColor(150, 150, 150);
+          doc.text('Credits capped at 30% of monthly invoice. Exclusions: scheduled maintenance, force majeure, customer-caused incidents.', M + 5, y, { maxWidth: CW - 10 });
+          y += 4;
+          doc.text('Credits apply to future invoices, not cash refunds.', M + 5, y);
+          doc.setTextColor(60, 60, 60);
+          y += 7;
 
           // Warnings
           if (r.warnings.length > 0) {
@@ -1552,9 +1566,11 @@
             '',
             ...r.architecture.map(a => '- ' + a),
             '',
-            '## Penalties',
+            '## Penalties (measured monthly)',
             '',
             ...r.penalties.map(p => '- ' + p),
+            '',
+            '*Credits capped at 30% of monthly invoice. Exclusions: scheduled maintenance, force majeure, customer-caused incidents. Credits apply to future invoices, not cash refunds.*',
           ];
           if (r.warnings.length > 0) {
             lines.push('', '## Warnings', '');
