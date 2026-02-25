@@ -89,11 +89,11 @@
 
         <!-- SECTION: progress -->
         <nav aria-label="Form progress" class="mb-8">
-          <ol class="flex items-center justify-center gap-2">
+          <ol class="flex items-center justify-center gap-1 sm:gap-2">
             <template x-for="s in 6" :key="s">
               <li class="flex items-center">
                 <div
-                  class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold transition-colors duration-200"
+                  class="w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-xs sm:text-sm font-semibold transition-colors duration-200"
                   :class="{
                     'bg-green-500 text-white': s < currentStep,
                     'bg-blue-500 text-white': s === currentStep,
@@ -103,7 +103,7 @@
                 ></div>
                 <div
                   x-show="s < 6"
-                  class="w-6 sm:w-10 h-0.5 mx-1"
+                  class="w-3 sm:w-10 h-0.5 mx-0.5 sm:mx-1"
                   :class="s < currentStep ? 'bg-green-500' : 'bg-gray-200 dark:bg-gray-700'"
                 ></div>
               </li>
@@ -112,12 +112,12 @@
         </nav>
 
         <!-- SECTION: steps -->
-        <div class="relative p-2 -m-2 min-h-[280px]" @keydown="handleCardKeydown">
+        <div class="relative p-2 -m-2 sm:min-h-[280px]" @keydown="handleCardKeydown">
 
           <!-- Step 1: Criticality -->
           <div
             x-show="currentStep === 1"
-            class="absolute inset-0"
+            class="sm:absolute sm:inset-0"
             x-transition:enter="transition ease-out duration-200"
             x-transition:enter-start="opacity-0"
             x-transition:enter-end="opacity-100"
@@ -158,7 +158,7 @@
           <!-- Step 2: Downtime Tolerance -->
           <div
             x-show="currentStep === 2"
-            class="absolute inset-0"
+            class="sm:absolute sm:inset-0"
             x-transition:enter="transition ease-out duration-200"
             x-transition:enter-start="opacity-0"
             x-transition:enter-end="opacity-100"
@@ -199,7 +199,7 @@
           <!-- Step 3: Support Window -->
           <div
             x-show="currentStep === 3"
-            class="absolute inset-0"
+            class="sm:absolute sm:inset-0"
             x-transition:enter="transition ease-out duration-200"
             x-transition:enter-start="opacity-0"
             x-transition:enter-end="opacity-100"
@@ -240,7 +240,7 @@
           <!-- Step 4: Budget -->
           <div
             x-show="currentStep === 4"
-            class="absolute inset-0"
+            class="sm:absolute sm:inset-0"
             x-transition:enter="transition ease-out duration-200"
             x-transition:enter-start="opacity-0"
             x-transition:enter-end="opacity-100"
@@ -281,7 +281,7 @@
           <!-- Step 5: RTO -->
           <div
             x-show="currentStep === 5"
-            class="absolute inset-0"
+            class="sm:absolute sm:inset-0"
             x-transition:enter="transition ease-out duration-200"
             x-transition:enter-start="opacity-0"
             x-transition:enter-end="opacity-100"
@@ -322,7 +322,7 @@
           <!-- Step 6: RPO -->
           <div
             x-show="currentStep === 6"
-            class="absolute inset-0"
+            class="sm:absolute sm:inset-0"
             x-transition:enter="transition ease-out duration-200"
             x-transition:enter-start="opacity-0"
             x-transition:enter-end="opacity-100"
@@ -367,7 +367,7 @@
           <button
             x-show="currentStep > 1"
             @click="prevStep()"
-            class="px-6 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
+            class="px-6 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
           >
             Previous
           </button>
@@ -378,7 +378,7 @@
             @click="nextStep()"
             :disabled="!isStepValid()"
             data-nav-next
-            class="px-6 py-2.5 rounded-lg font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
+            class="px-6 py-3 rounded-lg font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
             :class="isStepValid()
               ? 'bg-blue-600 hover:bg-blue-700 text-white'
               : 'bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed'"
@@ -391,7 +391,7 @@
             @click="calculate()"
             :disabled="!isStepValid()"
             data-nav-next
-            class="px-6 py-2.5 rounded-lg font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
+            class="px-6 py-3 rounded-lg font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
             :class="isStepValid()
               ? 'bg-green-600 hover:bg-green-700 text-white'
               : 'bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed'"
@@ -413,12 +413,12 @@
 
         <!-- Hero card -->
         <div
-          class="rounded-2xl p-8 text-white mb-8"
+          class="rounded-2xl p-5 sm:p-8 text-white mb-8"
           :class="result ? tierGradient(result.tier) : ''"
         >
           <p class="text-sm font-medium uppercase tracking-wider opacity-80">SLA recommendation</p>
-          <h2 class="text-4xl font-bold mt-2" x-text="result ? result.tier : ''"></h2>
-          <p class="text-5xl font-bold font-mono mt-2" x-text="result ? result.slaPercent + '%' : ''"></p>
+          <h2 class="text-2xl sm:text-4xl font-bold mt-2" x-text="result ? result.tier : ''"></h2>
+          <p class="text-3xl sm:text-5xl font-bold font-mono mt-2" x-text="result ? result.slaPercent + '%' : ''"></p>
           <p class="mt-3 opacity-80 text-sm">
             Score: <span class="font-mono font-semibold" x-text="result ? result.score + '/24' : ''"></span>
           </p>
@@ -534,7 +534,7 @@
         </template>
 
         <!-- Action buttons -->
-        <div class="flex flex-wrap justify-center gap-3" data-no-print>
+        <div class="grid grid-cols-2 sm:flex sm:flex-wrap justify-center gap-3" data-no-print>
           <button
             @click="reset()"
             class="px-6 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
@@ -623,15 +623,15 @@
                 <tr class="border-b border-gray-100 dark:border-gray-800">
                   <td class="py-2.5 px-3 font-medium" x-text="sla.category"></td>
                   <td class="py-2.5 px-3 text-center">
-                    <div class="text-xs text-gray-400 dark:text-gray-500" x-text="sla.aws.name"></div>
+                    <div class="hidden sm:block text-xs text-gray-400 dark:text-gray-500" x-text="sla.aws.name"></div>
                     <div class="font-mono font-semibold" :class="result ? (sla.aws.sla < result.slaPercent ? 'text-amber-500' : 'text-green-600 dark:text-green-400') : ''" x-text="sla.aws.sla + '%'"></div>
                   </td>
                   <td class="py-2.5 px-3 text-center">
-                    <div class="text-xs text-gray-400 dark:text-gray-500" x-text="sla.gcp.name"></div>
+                    <div class="hidden sm:block text-xs text-gray-400 dark:text-gray-500" x-text="sla.gcp.name"></div>
                     <div class="font-mono font-semibold" :class="result ? (sla.gcp.sla < result.slaPercent ? 'text-amber-500' : 'text-green-600 dark:text-green-400') : ''" x-text="sla.gcp.sla + '%'"></div>
                   </td>
                   <td class="py-2.5 px-3 text-center">
-                    <div class="text-xs text-gray-400 dark:text-gray-500" x-text="sla.azure.name"></div>
+                    <div class="hidden sm:block text-xs text-gray-400 dark:text-gray-500" x-text="sla.azure.name"></div>
                     <div class="font-mono font-semibold" :class="result ? (sla.azure.sla < result.slaPercent ? 'text-amber-500' : 'text-green-600 dark:text-green-400') : ''" x-text="sla.azure.sla + '%'"></div>
                   </td>
                 </tr>

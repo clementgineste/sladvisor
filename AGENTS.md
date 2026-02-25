@@ -67,7 +67,7 @@ All logic is client-side. The calculation engine is a pure JS function that take
 - **All code in `index.html`** — do not split into separate JS/CSS files
 - **Alpine.js patterns**: use `x-data`, `x-model`, `x-show`, `x-text`, `x-bind`
 - **Tailwind only** — no custom CSS unless absolutely necessary
-- **French UI** — all user-facing text in French
+- **English UI** — all user-facing text in English
 - **English code** — variable names, comments in English
 - **Accessible** — proper labels, ARIA attributes, keyboard navigation
 - **Responsive** — mobile-first, works on all viewports
