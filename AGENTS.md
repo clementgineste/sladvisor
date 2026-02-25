@@ -62,6 +62,20 @@ All logic is client-side. The calculation engine is a pure JS function that take
 | Platinum | 99.99% | 52min 33.6s | Critical services |
 | Diamond | 99.999% | 5min 15.4s | Life-safety, financial |
 
+### Scoring Engine Design
+
+The recommendation engine scores 6 input dimensions (0–4 each, max 24) and maps to tiers via linear thresholds (0/5/10/15/20).
+
+**Weight patterns:**
+- **4-option dimensions** (criticality, RTO, RPO): use `0, 1, 3, 4` — the +2 jump at medium→high models the biggest architectural paradigm shift (single instance → multi-AZ HA)
+- **3-option dimensions** (downtimeTolerance, supportWindow, budgetLevel): use `0, 2, 4` — linear spacing for 3 ordered options
+
+**Budget dual role:** `budgetLevel` contributes to the score (+0/2/4) AND applies a hard cap (low→Silver, medium→Platinum, high→no cap). This is intentional: the cap dominates for constrained budgets, and the score inflation for high budgets is caught by the "overengineered" warning.
+
+**Tier thresholds** are linear (every 5 points) because non-linearity is already encoded in the scoring weights — linear thresholds avoid double-compounding.
+
+See issues #26, #27 for full rationale. See issue #28 for RTO/RPO ↔ tier compatibility matrix.
+
 ## Coding Guidelines
 
 - **All code in `index.html`** — do not split into separate JS/CSS files

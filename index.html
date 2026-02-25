@@ -786,6 +786,22 @@
       },
     };
 
+    // ── Scoring Rationale ──────────────────────────────────────────────
+    // Two weight patterns are used, reflecting real-world SLA engineering:
+    //
+    // 4-option dimensions use 0, 1, 3, 4 (non-linear):
+    //   - The +2 jump at medium→high models the biggest architectural
+    //     paradigm shift (single instance → multi-AZ HA). The high→critical
+    //     jump is only +1 because it's incremental hardening on existing HA.
+    //   - Same logic for RTO/RPO: the leap from "hours" to "minutes" of
+    //     recovery is the inflection point requiring redundancy + automation.
+    //
+    // 3-option dimensions use 0, 2, 4 (linear):
+    //   - Equal spacing is the only sensible choice for 3 ordered options.
+    //
+    // Max possible score: 4×6 = 24 (all dimensions at maximum).
+    // See issues #26 and #27 for the full design discussion.
+    // ──────────────────────────────────────────────────────────────────────
     const SCORING = {
       criticality:       { low: 0, medium: 1, high: 3, critical: 4 },
       downtimeTolerance: { hours: 0, minutes: 2, seconds: 4 },
@@ -797,6 +813,9 @@
 
     const TIER_ORDER = ['Bronze', 'Silver', 'Gold', 'Platinum', 'Diamond'];
 
+    // Thresholds divide the 0–24 score range into 5 equal-width bands.
+    // Non-linearity is already encoded in the SCORING weights above,
+    // so linear thresholds here avoid double-compounding the effect.
     const TIER_THRESHOLDS = [
       { minScore: 20, tier: 'Diamond' },
       { minScore: 15, tier: 'Platinum' },
@@ -805,6 +824,12 @@
       { minScore: 0,  tier: 'Bronze' },
     ];
 
+    // Budget acts as both a score contributor AND a hard cap (by design).
+    // - Score contribution: models "willingness to invest" as a signal of need.
+    // - Hard cap: prevents recommending tiers the user can't afford.
+    // For low/medium budgets, the cap dominates (Silver/Platinum max).
+    // For high budget, the +4 score inflation is caught by warning #7
+    // (overengineered) if criticality is low. See issue #27.
     const BUDGET_CAP = {
       low:    'Silver',
       medium: 'Platinum',
